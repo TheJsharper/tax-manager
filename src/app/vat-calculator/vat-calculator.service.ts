@@ -7,26 +7,27 @@ import {
   StartOfWeek,
   Status,
 } from './models/vat-country.models';
-import {Tax, taxes, getAllCountryTaxes} from './models/taxation';
+import { Tax, taxes, getAllCountryTaxes } from './models/taxation';
 
 @Injectable()
 export class VatCalculatorService {
   public getCountries(): Observable<Array<Country>> {
     return of(world);
   }
-  public getCountriesRaw():void{
-    const world:Array<Country> = getWorldCountries();
+  public getCountriesRaw(): void {
+    const world: Array<Country> = getWorldCountries();
     const taxes: Tax = getAllCountryTaxes();
-    world.map((values)=>{
-        const name =values.name.common.toUpperCase();
-        const u =taxes.countries.find((c)=> name.includes(c.country.toUpperCase()));
-        if(u){
-          return {...values, taxes:u};
-
-        }else{
-          return {...values};
-        }
-    }).forEach(console.log);/**/
+    world.map((values) => {
+      const name = values.name.common.toUpperCase();
+      const u = taxes.countries.find((c) =>
+        name.includes(c.country.toUpperCase())
+      );
+      if (u) {
+        return { ...values, taxes: u };
+      } else {
+        return { ...values };
+      }
+    }); //.forEach(console.log);/**/
   }
 }
 
@@ -86629,6 +86630,6 @@ export const world: Array<Country> = [
   },
 ];
 
-export function getWorldCountries():Array<Country>{
+export function getWorldCountries(): Array<Country> {
   return world;
 }
