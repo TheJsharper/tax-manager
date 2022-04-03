@@ -7,7 +7,7 @@ import {
   StartOfWeek,
   Status,
 } from './models/vat-country.models';
-import {Tax, taxes} from './models/taxation';
+import {Tax, taxes, getAllCountryTaxes} from './models/taxation';
 
 @Injectable()
 export class VatCalculatorService {
@@ -15,8 +15,8 @@ export class VatCalculatorService {
     return of(world);
   }
   public getCountriesRaw():void{
-    /*var world:Array<Country> = world;
-    var taxes: Tax = taxes;
+    const world:Array<Country> = getWorldCountries();
+    const taxes: Tax = getAllCountryTaxes();
     world.map((values)=>{
         const name =values.name.common.toUpperCase();
         const u =taxes.countries.find((c)=> name.includes(c.country.toUpperCase()));
@@ -26,7 +26,7 @@ export class VatCalculatorService {
         }else{
           return {...values};
         }
-    }).forEach(console.log);*/
+    }).forEach(console.log);/**/
   }
 }
 
@@ -86628,3 +86628,7 @@ export const world: Array<Country> = [
     },
   },
 ];
+
+export function getWorldCountries():Array<Country>{
+  return world;
+}

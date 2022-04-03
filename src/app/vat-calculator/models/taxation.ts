@@ -1542,3 +1542,7 @@ export const taxes: Tax = {
     },
   ],
 };
+
+export function getAllCountryTaxes():Tax{
+  return taxes;
+}
