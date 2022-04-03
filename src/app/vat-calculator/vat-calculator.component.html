@@ -1,0 +1,14 @@
+<div [formGroup]="formGroup">
+  <mat-form-field appearance="fill" *ngIf="countries as countriesList">
+    <mat-label>Country</mat-label>
+    <mat-select formControlName="selected">
+      <mat-option
+        *ngFor="let country of (countriesList | async)"
+        [value]="country.name.common"
+        >{{ country.name.common }}</mat-option
+      >
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<p *ngIf="selected as selectedCountry">You selected: {{ selectedCountry | async }}</p>
