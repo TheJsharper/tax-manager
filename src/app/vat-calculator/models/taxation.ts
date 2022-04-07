@@ -7,7 +7,7 @@ export interface Countries {
   taxes?: string[];
   name: string;
 }
-
+/*
 export const taxes: Tax = {
   countries: [
     {
@@ -1541,8 +1541,8 @@ export const taxes: Tax = {
       name: 'Taxation in Zimbabwe',
     },
   ],
-};
-
+};*/
+/*
 export function getAllCountryTaxes():Tax{
   return taxes;
-}
+}*/
