@@ -5,10 +5,21 @@
       <mat-option
         *ngFor="let country of (countriesList | async)"
         [value]="country.name.common"
-        >{{ country.name.common }}</mat-option
+         >
+        <ng-container [ngTemplateOutlet]="content" [ngTemplateOutletContext]="{food: country}">
+        </ng-container>
+        </mat-option
       >
     </mat-select>
   </mat-form-field>
 </div>
 
 <p *ngIf="selected as selectedCountry">You selected: {{ selectedCountry | async }}</p>
+
+<ng-template #content let-food="food">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <img [src]="food.flags.svg" style="border-radius:15% ; width: 50px;">
+      <div>
+      {{food.name.common}} </div> 
+    </div>
+</ng-template>
