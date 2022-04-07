@@ -4,6 +4,7 @@ import { merge, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Country } from './models/vat-country.models';
 import { VatCalculatorService } from './vat-calculator.service';
+import { VatCalculatorService2 } from './vat-calculator.service2';
 
 @Component({
   selector: 'vat-calculator',
@@ -16,7 +17,7 @@ export class VatCalculatorComponent implements OnInit {
   formGroup!: FormGroup;
 
   constructor(
-    private vatCalculatorService: VatCalculatorService,
+    private vatCalculatorService: VatCalculatorService,  private vatCalculatorService2: VatCalculatorService2, 
     private fb: FormBuilder
   ) {}
 
