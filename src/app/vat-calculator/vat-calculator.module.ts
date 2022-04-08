@@ -1,17 +1,16 @@
-import { VATRoutingModule } from './vat-routing.module';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { VatCalculatorComponent } from './vat-calculator.component';
 import { MatSelectModule } from '@angular/material/select';
+import { VatCalculatorComponent } from './vat-calculator.component';
 import { VatCalculatorService } from './vat-calculator.service';
-import { VatCalculatorService2 } from './vat-calculator.service2';
-import { HttpClientModule } from '@angular/common/http';
+import { VATRoutingModule } from './vat-routing.module';
 
 @NgModule({
   declarations: [VatCalculatorComponent],
   imports: [CommonModule, ReactiveFormsModule, MatSelectModule,VATRoutingModule, HttpClientModule],
   exports: [VatCalculatorComponent],
-  providers: [VatCalculatorService, VatCalculatorService2],
+  providers: [ VatCalculatorService],
 })
 export class VatCalculatorModule {}

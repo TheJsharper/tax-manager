@@ -4,7 +4,6 @@ import { merge, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Country } from './models/vat-country.models2';
 import { VatCalculatorService } from './vat-calculator.service';
-import { VatCalculatorService2 } from './vat-calculator.service2';
 
 @Component({
   selector: 'vat-calculator',
@@ -16,14 +15,13 @@ export class VatCalculatorComponent implements OnInit {
   countries!: Observable<Array<Country>>;
   formGroup!: FormGroup;
 
-  constructor(
-    private vatCalculatorService: VatCalculatorService,  private vatCalculatorService2: VatCalculatorService2, 
+  constructor(  private vatCalculatorService: VatCalculatorService, 
     private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
     this.formGroup = this.fb.group({ selected: new FormControl('') });
-    this.countries = this.vatCalculatorService2
+    this.countries = this.vatCalculatorService
       .getNewCountries()
       .pipe(
         map((countries: Country[]) =>
@@ -43,6 +41,5 @@ export class VatCalculatorComponent implements OnInit {
     /*this.selected.subscribe((current: string) =>
       console.log('currenty Selected====>', current)
     );*/
-    this.vatCalculatorService.getCountriesRaw();
   }
 }
