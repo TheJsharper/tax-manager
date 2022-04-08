@@ -1,9 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import {
-    Country, sortDirection
-} from './models/vat-country.models';
+import { Country, sortDirection } from './models/vat-country.models';
 
 
 @Injectable()
@@ -14,10 +12,12 @@ export class VatCalculatorService {
         const countries$: Observable<Array<Country>> = this.httpClient.get<Array<Country>>("/assets/output/taxed-all-countries.json");
         return this.getSortedCountries(countries$, sortDirection.ASC);
     }
+
     public getSortedDescCountries(): Observable<Array<Country>> {
         const countries$: Observable<Array<Country>> = this.httpClient.get<Array<Country>>("/assets/output/taxed-all-countries.json");
         return this.getSortedCountries(countries$, sortDirection.DESC);
     }
+
     private getSortedCountries(countries$: Observable<Array<Country>>, sortDir: sortDirection): Observable<Array<Country>> {
         return countries$
             .pipe(
@@ -26,16 +26,16 @@ export class VatCalculatorService {
                 )
             );
     }
-    public getCountryByName(countries$: Observable<Array<Country>>, countryName: string): Observable<string | undefined> {
+    public getCountryByName(countries$: Observable<Array<Country>>, countryName: string): Observable<Country | undefined> {
         return countries$.pipe(
             map(
                 (countries: Country[]) => {
                     const country: Country | undefined = countries.find((c) => c.name.common.toLowerCase() == countryName.toLowerCase());
                     if (country) {
-                        return countries.filter((c) => c.name.common.toLowerCase() == countryName.toLowerCase())[0].name.common
+                        return country;
 
                     } else {
-                        return countries.length > 0 ? countries[0].name.common : undefined;
+                        return countries.length > 0 ? countries[0] : undefined;
                     }
                 }
             )
