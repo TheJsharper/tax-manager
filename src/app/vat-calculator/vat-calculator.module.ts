@@ -6,10 +6,11 @@ import { VatCalculatorComponent } from './vat-calculator.component';
 import { MatSelectModule } from '@angular/material/select';
 import { VatCalculatorService } from './vat-calculator.service';
 import { VatCalculatorService2 } from './vat-calculator.service2';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [VatCalculatorComponent],
-  imports: [CommonModule, ReactiveFormsModule, MatSelectModule,VATRoutingModule],
+  imports: [CommonModule, ReactiveFormsModule, MatSelectModule,VATRoutingModule, HttpClientModule],
   exports: [VatCalculatorComponent],
   providers: [VatCalculatorService, VatCalculatorService2],
 })

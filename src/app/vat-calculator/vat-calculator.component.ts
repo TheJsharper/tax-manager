@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { merge, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Country } from './models/vat-country.models';
+import { Country } from './models/vat-country.models2';
 import { VatCalculatorService } from './vat-calculator.service';
 import { VatCalculatorService2 } from './vat-calculator.service2';
 
@@ -23,8 +23,8 @@ export class VatCalculatorComponent implements OnInit {
 
   ngOnInit(): void {
     this.formGroup = this.fb.group({ selected: new FormControl('') });
-    this.countries = this.vatCalculatorService
-      .getCountries()
+    this.countries = this.vatCalculatorService2
+      .getNewCountries()
       .pipe(
         map((countries: Country[]) =>
           countries.sort((a, b) => a.name.common.localeCompare(b.name.common))
