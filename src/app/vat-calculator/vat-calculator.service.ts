@@ -1,15 +1,10 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import {
-    Country,
-    /*Region,
-    Side,
-    StartOfWeek,
-    Status,*/
-} from './models/vat-country.models2';
-//import { Tax, taxes, getAllCountryTaxes } from './models/taxation';
-
 import { HttpClient } from "@angular/common/http";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import {
+    Country
+} from './models/vat-country.models';
+
 
 @Injectable()
 export class VatCalculatorService {

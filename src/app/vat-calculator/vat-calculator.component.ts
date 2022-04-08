@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { merge, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Country } from './models/vat-country.models2';
+import { Country } from './models/vat-country.models';
 import { VatCalculatorService } from './vat-calculator.service';
 
 @Component({
