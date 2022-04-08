@@ -28,6 +28,7 @@
     <mat-form-field appearance="fill">
       <input type="number" matInput formControlName="withoutVAT" [readonly]="!(formGroup.get('byWithoutVAT')?.value)">
     </mat-form-field>
+    <mat-label>{{(selectedTax| async)}}</mat-label>
   </div>
 
   <div style="display: flex; justify-content: space-evenly;">

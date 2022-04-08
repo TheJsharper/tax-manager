@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  AbstractControl,
-} from '@angular/forms';
-import { filter, interval, map, merge, Observable, take, tap } from 'rxjs';
-import { Country } from './models/vat-country.models';
+  combineLatest,
+  concatMap,
+  map,
+  merge,
+  mergeMap,
+  Observable,
+  switchMap,
+  tap,
+} from 'rxjs';
+import { Country, TaxElement, CountryTax } from './models/vat-country.models';
 import { VatCalculatorService } from './vat-calculator.service';
 
 @Component({
@@ -18,6 +22,7 @@ export class VatCalculatorComponent implements OnInit {
   selected!: Observable<Country | undefined>;
   countries!: Observable<Array<Country>>;
   formGroup!: FormGroup;
+  selectedTax!: Observable<number>;
 
   constructor(
     private vatCalculatorService: VatCalculatorService,
@@ -27,7 +32,7 @@ export class VatCalculatorComponent implements OnInit {
   ngOnInit(): void {
     this.formGroup = this.fb.group({
       selected: new FormControl(''),
-      labelPosition: new FormControl(''),
+      labelPosition: new FormControl(0),
       withoutVAT: new FormControl(20),
       byWithoutVAT: new FormControl(true),
 
@@ -47,58 +52,98 @@ export class VatCalculatorComponent implements OnInit {
       selectedCountry,
       this.formGroup.get('selected')!.valueChanges
     );
-    const concurrent = 2;
+    this.selected.subscribe(console.log);
+ /*    this.selectedTax = this.selected.pipe(
+      switchMap((value) =>
+        this.formGroup.get('labelPosition')!.valueChanges.pipe(
+          map((vv: number) => {
+            const v = value?.tax?.taxes[vv]!;
+            return v.value == 0 ? 0 : v.value / 100;
+          })
+        )
+      )
+    );
+    this.selectedTax=  this.formGroup.get('labelPosition')!.valueChanges.pipe(mergeMap((vv:number)=>
+     this.selected.pipe(map((value)=>{
+        const v = value?.tax?.taxes[vv]!;
+        return v.value == 0 ? 0 : v.value / 100;
+      })
+    )));
 
-    if (this.test(this.formGroup, 'byWithoutVAT')) {
-      const byWithoutVATControl = this.formGroup.get('byWithoutVAT');
-      if (this.test(this.formGroup, 'byValueAddedVAT')) {
-        const byValueAddedVATControl = this.formGroup.get('byValueAddedVAT');
+    this.selectedTax=  this.formGroup.get('labelPosition')!.valueChanges.pipe(concatMap((vv:number)=>
+     this.selected.pipe(map((value)=>{
+        const v = value?.tax?.taxes[vv]!;
+        return v.value == 0 ? 0 : v.value / 100;
+      })
+    )))*/
+    this.formGroup
+      .get('labelPosition')!
+      .valueChanges.pipe(
+        map((vv: number) => {
+          return vv;
+        })
+      )
+      .subscribe(console.log);
+    this.selectedTax = combineLatest([
+      this.formGroup.get('labelPosition')!.valueChanges,
+      this.selected,
+    ]).pipe(
+      map((values: [number, Country | undefined]) => {
+        const v = values[1]?.tax?.taxes[values[0]]!;
+        return v.value == 0 ? 0 : v.value / 100;
+      })
+    );/**/
+   this.selectedTax.subscribe((v)=>console.log("===>x",v));
 
-        if (this.test(this.formGroup, 'byPriceInclVAT')) {
-          const byPriceInclVATControl = this.formGroup.get('byPriceInclVAT');
+    this.formGroup.get('labelPosition')?.setValue(0);
+    const byWithoutVATControl = this.formGroup.get('byWithoutVAT');
 
-          const merged = merge(
-            byWithoutVATControl!.valueChanges.pipe(
-              map((value: boolean) => ({ name: 'byWithoutVAT', value }))
-            ),
-            byValueAddedVATControl!.valueChanges.pipe(
-              map((value: boolean) => ({ name: 'byValueAddedVAT', value }))
-            ),
-            byPriceInclVATControl!.valueChanges.pipe(
-              map((value: boolean) => ({ name: 'byPriceInclVAT', value }))
-            )
-          ).pipe(
-            tap((value) => {
-              console.log("TAP", value);
-              const defaultValue = {
-                onlySelf: true,
-                emitEvent: false
-            };
-              if (value.name == 'byWithoutVAT' && value.name) {
-                byValueAddedVATControl?.setValue(false,defaultValue);
-                byPriceInclVATControl?.setValue(false, defaultValue);
-              }
+    const byValueAddedVATControl = this.formGroup.get('byValueAddedVAT');
 
-              if (value.name == 'byValueAddedVAT' && value.name) {
-                byWithoutVATControl?.setValue(false, defaultValue);
-                byPriceInclVATControl?.setValue(false,defaultValue);
-              }
+    const byPriceInclVATControl = this.formGroup.get('byPriceInclVAT');
 
-              if (value.name == 'byPriceInclVAT' && value.name) {
-                byValueAddedVATControl?.setValue(false, defaultValue);
-                byWithoutVATControl?.setValue(false, defaultValue);
-              }
-            })
-          ).subscribe(console.log);
-        }
-      }
-    }
-  }
+    const defaultValue = {
+      onlySelf: true,
+      emitEvent: false,
+    };
+    const merged = merge(
+      byWithoutVATControl!.valueChanges.pipe(
+        map((value: boolean) => ({ name: 'byWithoutVAT', value }))
+      ),
+      byValueAddedVATControl!.valueChanges.pipe(
+        map((value: boolean) => ({ name: 'byValueAddedVAT', value }))
+      ),
+      byPriceInclVATControl!.valueChanges.pipe(
+        map((value: boolean) => ({ name: 'byPriceInclVAT', value }))
+      )
+    )
+      .pipe(
+        tap((value) => {
+          if (value.name == 'byWithoutVAT' && value.name) {
+            byValueAddedVATControl?.setValue(false, defaultValue);
+            byPriceInclVATControl?.setValue(false, defaultValue);
+          }
 
-  private test(
-    el: AbstractControl | null,
-    controlName: string
-  ): el is AbstractControl {
-    return el?.get(controlName) !== null;
+          if (value.name == 'byValueAddedVAT' && value.name) {
+            byWithoutVATControl?.setValue(false, defaultValue);
+            byPriceInclVATControl?.setValue(false, defaultValue);
+          }
+
+          if (value.name == 'byPriceInclVAT' && value.name) {
+            byValueAddedVATControl?.setValue(false, defaultValue);
+            byWithoutVATControl?.setValue(false, defaultValue);
+          }
+        })
+      )
+      .subscribe(console.log);
+    /*this.selectedTax = this.selected.pipe(
+      
+      map((value) => {
+        const index: number = this.formGroup.get('labelPosition')?.value;
+        return (value?.tax?.taxes.find(
+          (value: TaxElement, indexEl: number) => index == indexEl)?.value
+        );
+      })
+    );*/
   }
 }
