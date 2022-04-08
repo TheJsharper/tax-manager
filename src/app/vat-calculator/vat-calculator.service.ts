@@ -1,8 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import {
-    Country
+    Country, sortDirection
 } from './models/vat-country.models';
 
 
@@ -10,8 +10,36 @@ import {
 export class VatCalculatorService {
     constructor(private httpClient: HttpClient) { }
 
-    public getNewCountries(): Observable<Array<Country>> {
-        return this.httpClient.get<Array<Country>>("/assets/output/taxed-all-countries.json");
+    public getSortedAscCountries(): Observable<Array<Country>> {
+        const countries$: Observable<Array<Country>> = this.httpClient.get<Array<Country>>("/assets/output/taxed-all-countries.json");
+        return this.getSortedCountries(countries$, sortDirection.ASC);
+    }
+    public getSortedDescCountries(): Observable<Array<Country>> {
+        const countries$: Observable<Array<Country>> = this.httpClient.get<Array<Country>>("/assets/output/taxed-all-countries.json");
+        return this.getSortedCountries(countries$, sortDirection.DESC);
+    }
+    private getSortedCountries(countries$: Observable<Array<Country>>, sortDir: sortDirection): Observable<Array<Country>> {
+        return countries$
+            .pipe(
+                map((countries: Country[]) =>
+                    countries.sort((a: Country, b: Country) => sortDir == sortDirection.ASC ? a.name.common.localeCompare(b.name.common) : b.name.common.localeCompare(a.name.common))
+                )
+            );
+    }
+    public getCountryByName(countries$: Observable<Array<Country>>, countryName: string): Observable<string | undefined> {
+        return countries$.pipe(
+            map(
+                (countries: Country[]) => {
+                    const country: Country | undefined = countries.find((c) => c.name.common.toLowerCase() == countryName.toLowerCase());
+                    if (country) {
+                        return countries.filter((c) => c.name.common.toLowerCase() == countryName.toLowerCase())[0].name.common
+
+                    } else {
+                        return countries.length > 0 ? countries[0].name.common : undefined;
+                    }
+                }
+            )
+        );
     }
 }
 

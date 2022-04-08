@@ -1,3 +1,4 @@
+
 export interface Country {
   name: Name;
   tld?: string[];
@@ -28,7 +29,7 @@ export interface Country {
   fifa?: string;
   car: Car;
   timezones: string[];
-  continents: ("Africa" | "Antartica" | "Asia" | "Europe" | "North America" | "Oceania" | "South America" |"Antarctica")[];
+  continents: ("Africa" | "Antartica" | "Asia" | "Europe" | "North America" | "Oceania" | "South America" | "Antarctica")[];
   flags: CoatOfArms;
   coatOfArms: CoatOfArms;
   startOfWeek: "monday" | "sunday" | "turday";
@@ -45,192 +46,14 @@ export interface Car {
   signs?: string[];
   side: "left" | "right";
 }
-/*
-export enum Side {
-  Left = "left",
-  Right = "right",
-}*/
+
 
 export interface CoatOfArms {
   png?: string;
   svg?: string;
 }
-/*
-export enum Continent {
-  Africa = "Africa",
-  Antarctica = "Antarctica",
-  Asia = "Asia",
-  Europe = "Europe",
-  NorthAmerica = "North America",
-  Oceania = "Oceania",
-  SouthAmerica = "South America",
-}*/
-/*
-export interface Currencies {
-  uyu?: Aed;
-  pyg?: Aed;
-  gmd?: Aed;
-  djf?: Aed;
-  eur?: Aed;
-  usd?: Aed;
-  gel?: Aed;
-  bzd?: Aed;
-  mur?: Aed;
-  lbp?: Aed;
-  sar?: Aed;
-  brl?: Aed;
-  ugx?: Aed;
-  qar?: Aed;
-  mnt?: Aed;
-  clp?: Aed;
-  lrd?: Aed;
-  aud?: Aed;
-  xcd?: Aed;
-  twd?: Aed;
-  ars?: Aed;
-  xof?: Aed;
-  dkk?: Aed;
-  fok?: Aed;
-  mad?: Aed;
-  mru?: Aed;
-  uah?: Aed;
-  cny?: Aed;
-  lsl?: Aed;
-  zar?: Aed;
-  cdf?: Aed;
-  rub?: Aed;
-  bdt?: Aed;
-  ang?: Aed;
-  gtq?: Aed;
-  ils?: Aed;
-  gyd?: Aed;
-  kyd?: Aed;
-  hrk?: Aed;
-  isk?: Aed;
-  nad?: Aed;
-  gip?: Aed;
-  omr?: Aed;
-  kwd?: Aed;
-  gbp?: Aed;
-  hnl?: Aed;
-  shp?: Aed;
-  khr?: Aed;
-  mkd?: Aed;
-  irr?: Aed;
-  pab?: Aed;
-  ckd?: Aed;
-  nzd?: Aed;
-  bif?: Aed;
-  ttd?: Aed;
-  kmf?: Aed;
-  ngn?: Aed;
-  pln?: Aed;
-  xpf?: Aed;
-  etb?: Aed;
-  azn?: Aed;
-  npr?: Aed;
-  bbd?: Aed;
-  jep?: Aed;
-  inr?: Aed;
-  kgs?: Aed;
-  ssp?: Aed;
-  iqd?: Aed;
-  cuc?: Aed;
-  cup?: Aed;
-  btn?: Aed;
-  bsd?: Aed;
-  nok?: Aed;
-  kes?: Aed;
-  sek?: Aed;
-  xaf?: Aed;
-  mop?: Aed;
-  ggp?: Aed;
-  rwf?: Aed;
-  syp?: Aed;
-  cad?: Aed;
-  dzd?: Aed;
-  imp?: Aed;
-  bwp?: Aed;
-  kzt?: Aed;
-  ves?: Aed;
-  sdg?: BAM;
-  sbd?: Aed;
-  jmd?: Aed;
-  afn?: Aed;
-  rsd?: Aed;
-  tjs?: Aed;
-  top?: Aed;
-  kid?: Aed;
-  ern?: Aed;
-  htg?: Aed;
-  vuv?: Aed;
-  bam?: BAM;
-  wst?: Aed;
-  bob?: Aed;
-  mga?: Aed;
-  stn?: Aed;
-  bhd?: Aed;
-  pen?: Aed;
-  srd?: Aed;
-  thb?: Aed;
-  tvd?: Aed;
-  kpw?: Aed;
-  yer?: Aed;
-  amd?: Aed;
-  pkr?: Aed;
-  mwk?: Aed;
-  php?: Aed;
-  czk?: Aed;
-  mmk?: Aed;
-  ron?: Aed;
-  dop?: Aed;
-  ghs?: Aed;
-  try?: Aed;
-  egp?: Aed;
-  mzn?: Aed;
-  huf?: Aed;
-  aed?: Aed;
-  all?: Aed;
-  fjd?: Aed;
-  mdl?: Aed;
-  byn?: Aed;
-  lkr?: Aed;
-  bmd?: Aed;
-  nio?: Aed;
-  sos?: Aed;
-  jod?: Aed;
-  tmt?: Aed;
-  crc?: Aed;
-  vnd?: Aed;
-  szl?: Aed;
-  zmw?: Aed;
-  chf?: Aed;
-  uzs?: Aed;
-  awg?: Aed;
-  jpy?: Aed;
-  cve?: Aed;
-  hkd?: Aed;
-  bgn?: Aed;
-  lak?: Aed;
-  krw?: Aed;
-  tnd?: Aed;
-  zwl?: Aed;
-  mvr?: Aed;
-  sgd?: Aed;
-  aoa?: Aed;
-  myr?: Aed;
-  gnf?: Aed;
-  lyd?: Aed;
-  idr?: Aed;
-  scr?: Aed;
-  bnd?: Aed;
-  mxn?: Aed;
-  sll?: Aed;
-  cop?: Aed;
-  pgk?: Aed;
-  fkp?: Aed;
-  tzs?: Aed;
-}*/
+
+
 export interface Currencies {
   USD?: Aed;
   ANG?: Aed;
@@ -441,26 +264,6 @@ export interface PostalCode {
   format: string;
   regex?: string;
 }
-/*
-export enum Region {
-  Africa = "Africa",
-  Americas = "Americas",
-  Antarctic = "Antarctic",
-  Asia = "Asia",
-  Europe = "Europe",
-  Oceania = "Oceania",
-}*/
-/*
-export enum StartOfWeek {
-  Monday = "monday",
-  Sunday = "sunday",
-  Turday = "turday",
-}
-
-export enum Status {
-  OfficiallyAssigned = "officially-assigned",
-  UserAssigned = "user-assigned",
-}*/
 
 export interface CountryTax {
   country: string;
@@ -479,6 +282,7 @@ export interface TaxElement {
   value: number;
   porcentage: string;
 }
-let someArray: ("test"|"Test2")[] = [
-  "Test2", "test"
-]
+
+export enum sortDirection {
+  ASC = "ASC", DESC = "DESC"
+}
