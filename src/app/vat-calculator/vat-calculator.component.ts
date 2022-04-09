@@ -124,7 +124,7 @@ export class VatCalculatorComponent implements OnInit, OnDestroy {
       )
       .subscribe(console.log);
 
-      const sel= this.selected
+      /*const sel= this.selected
       .pipe(
         mergeMap((country: Country | undefined) => {
          return   this.formGroup.get("labelPosition")!.valueChanges.pipe(map((value:number)=>({name:"labelPosition",value}))).pipe(map((values:{name:string, value:number})=>{
@@ -140,7 +140,23 @@ export class VatCalculatorComponent implements OnInit, OnDestroy {
         tap((values:{name:string, value:number})=>{
           this.formGroup.get("selectedPorcentageTax")?.setValue(values.value);
         })
-      )
+      ).subscribe();*/
+      const sel= this.formGroup.get("labelPosition")!.valueChanges.pipe(map((value:number)=>({name:"labelPosition",value})))
+      .pipe(
+        switchMap((values:{name:string, value:number}) => {
+         return  this.selected.pipe(map((country:Country|undefined)=>{
+          if(values.name=="labelPosition" && country?.tax && country.tax.taxes.length>0){
+            const porcentage:number =country?.tax?.taxes[values.value].value!;
+            const v = porcentage/100;
+            return {...values, value:v};
+          }else{
+            return {...values, value:0};
+          }
+          }))
+         }),
+        tap((values:{name:string, value:number})=>{
+          this.formGroup.get("selectedPorcentageTax")?.setValue(values.value);
+        })).subscribe();
 
     const mergedInputs: Observable<{ name: string; value: number }> = merge(
       withoutVATControl!.valueChanges.pipe(
@@ -158,15 +174,13 @@ export class VatCalculatorComponent implements OnInit, OnDestroy {
    
     
      
-  sel.pipe(mergeMap((v:{name:string, value:number}) => {
-        return mergedInputs.pipe(
+ // sel.pipe(mergeMap((v:{name:string, value:number}) => {
+         mergedInputs.pipe(
          
           tap((values: { name: string; value: number }) => {
-            let vatInPorcentage:number | undefined;
-            if(values.name ="labelPosition"){
-              vatInPorcentage = values.value;
-            }
-            if (values.name == 'withoutVAT' && values.value && vatInPorcentage) {
+            const vatInPorcentage:number = +this.formGroup.get("selectedPorcentageTax")!.value;
+            
+            if (values.name == 'withoutVAT' && values.value ) {
               
                 const vatToPay:number = parseFloat((values.value * vatInPorcentage).toFixed(2));
                 valueAddedVATControl?.setValue(vatToPay, defaultValue);
@@ -179,7 +193,7 @@ export class VatCalculatorComponent implements OnInit, OnDestroy {
                 priceInclVATControl?.setValue(null, defaultValue);
                 
             }
-            if (values.name == 'valueAddedVAT' && values.value && values.value !=0 &&  vatInPorcentage) {
+            if (values.name == 'valueAddedVAT' && values.value && values.value !=0 ) {
               const addedVat:number =parseFloat(values.value.toFixed(2));
              
                 const WithoutAVATTOPay:number = parseFloat((addedVat / vatInPorcentage).toFixed(2));
@@ -190,7 +204,7 @@ export class VatCalculatorComponent implements OnInit, OnDestroy {
               withoutVATControl?.setValue(null, defaultValue);
                 priceInclVATControl?.setValue(null,  defaultValue   );
             }
-            if (values.name == 'priceInclVAT' && values.value &&  vatInPorcentage) {
+            if (values.name == 'priceInclVAT' && values.value ) {
               const total:number = parseFloat(values.value.toFixed(2));
               const valueAdded:number = parseFloat((total * vatInPorcentage).toFixed(2));
               valueAddedVATControl?.setValue(valueAdded, defaultValue);
@@ -200,8 +214,8 @@ export class VatCalculatorComponent implements OnInit, OnDestroy {
               withoutVATControl?.setValue(null, defaultValue);
             }
           })
-        );
-      })).subscribe();
+        ).subscribe();
+    //  })).subscribe();
 
     
   }
