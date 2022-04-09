@@ -28,7 +28,7 @@
     <mat-form-field appearance="fill">
       <input type="number" matInput formControlName="withoutVAT" [readonly]="!(formGroup.get('byWithoutVAT')?.value)">
     </mat-form-field>
-    <mat-label>{{(selectedTax| async)}}</mat-label>
+    <!--<mat-label *ngIf="selectedTax| async as sel">{{sel}}</mat-label>-->
   </div>
 
   <div style="display: flex; justify-content: space-evenly;">

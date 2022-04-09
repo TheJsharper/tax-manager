@@ -1,14 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import {
   combineLatest,
   concatMap,
+  exhaustMap,
+  first,
+  firstValueFrom,
   map,
   merge,
   mergeMap,
+  mergeScan,
   Observable,
+  of,
+  startWith,
+  Subject,
   switchMap,
+  take,
+  takeUntil,
   tap,
+  withLatestFrom,
+  zip,
 } from 'rxjs';
 import { Country, TaxElement, CountryTax } from './models/vat-country.models';
 import { VatCalculatorService } from './vat-calculator.service';
@@ -17,19 +33,24 @@ import { VatCalculatorService } from './vat-calculator.service';
   selector: 'vat-calculator',
   templateUrl: './vat-calculator.component.html',
   styleUrls: ['./vat-calculator.component.scss'],
+  //changeDetection:ChangeDetectionStrategy.OnPush
 })
-export class VatCalculatorComponent implements OnInit {
+export class VatCalculatorComponent implements OnInit, OnDestroy {
   selected!: Observable<Country | undefined>;
   countries!: Observable<Array<Country>>;
   formGroup!: FormGroup;
   selectedTax!: Observable<number>;
 
+  private destroySignal: Subject<void>;
+
   constructor(
     private vatCalculatorService: VatCalculatorService,
     private fb: FormBuilder
-  ) {}
+  ) {
+    this.destroySignal = new Subject<void>();
+  }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.formGroup = this.fb.group({
       selected: new FormControl(''),
       labelPosition: new FormControl(0),
@@ -52,55 +73,18 @@ export class VatCalculatorComponent implements OnInit {
       selectedCountry,
       this.formGroup.get('selected')!.valueChanges
     );
-    this.selected.subscribe(console.log);
- /*    this.selectedTax = this.selected.pipe(
-      switchMap((value) =>
-        this.formGroup.get('labelPosition')!.valueChanges.pipe(
-          map((vv: number) => {
-            const v = value?.tax?.taxes[vv]!;
-            return v.value == 0 ? 0 : v.value / 100;
-          })
-        )
-      )
-    );
-    this.selectedTax=  this.formGroup.get('labelPosition')!.valueChanges.pipe(mergeMap((vv:number)=>
-     this.selected.pipe(map((value)=>{
-        const v = value?.tax?.taxes[vv]!;
-        return v.value == 0 ? 0 : v.value / 100;
-      })
-    )));
+    //this.selected.subscribe(console.log);
 
-    this.selectedTax=  this.formGroup.get('labelPosition')!.valueChanges.pipe(concatMap((vv:number)=>
-     this.selected.pipe(map((value)=>{
-        const v = value?.tax?.taxes[vv]!;
-        return v.value == 0 ? 0 : v.value / 100;
-      })
-    )))*/
-    this.formGroup
-      .get('labelPosition')!
-      .valueChanges.pipe(
-        map((vv: number) => {
-          return vv;
-        })
-      )
-      .subscribe(console.log);
-    this.selectedTax = combineLatest([
-      this.formGroup.get('labelPosition')!.valueChanges,
-      this.selected,
-    ]).pipe(
-      map((values: [number, Country | undefined]) => {
-        const v = values[1]?.tax?.taxes[values[0]]!;
-        return v.value == 0 ? 0 : v.value / 100;
-      })
-    );/**/
-   this.selectedTax.subscribe((v)=>console.log("===>x",v));
+    //this.selectedTax.subscribe((v) => console.log('===>x', v));
 
-    this.formGroup.get('labelPosition')?.setValue(0);
     const byWithoutVATControl = this.formGroup.get('byWithoutVAT');
+    const withoutVATControl = this.formGroup.get('withoutVAT');
 
     const byValueAddedVATControl = this.formGroup.get('byValueAddedVAT');
+    const valueAddedVATControl = this.formGroup.get('valueAddedVAT');
 
     const byPriceInclVATControl = this.formGroup.get('byPriceInclVAT');
+    const priceInclVATControl = this.formGroup.get('priceInclVAT');
 
     const defaultValue = {
       onlySelf: true,
@@ -118,6 +102,7 @@ export class VatCalculatorComponent implements OnInit {
       )
     )
       .pipe(
+        takeUntil(this.destroySignal),
         tap((value) => {
           if (value.name == 'byWithoutVAT' && value.name) {
             byValueAddedVATControl?.setValue(false, defaultValue);
@@ -136,6 +121,65 @@ export class VatCalculatorComponent implements OnInit {
         })
       )
       .subscribe(console.log);
+
+    const mergedInputs: Observable<{ name: string; value: number }> = merge(
+      withoutVATControl!.valueChanges.pipe(
+        map((value: number) => ({ name: 'withoutVAT', value }))
+      ),
+      valueAddedVATControl!.valueChanges.pipe(
+        map((value: number) => ({ name: 'valueAddedVAT', value }))
+      ),
+
+      priceInclVATControl!.valueChanges.pipe(
+        map((value: number) => ({ name: 'priceInclVAT', value }))
+      )
+    );
+
+    this.selected
+      .pipe(
+        mergeMap((country: Country | undefined) => {
+          return mergedInputs.pipe(
+            tap((values: { name: string; value: number }) => {
+              const vatInPorcentage = 0.19;
+              if (values.name == 'withoutVAT' && values.value) {
+                
+                  const vatToPay:number = parseFloat((values.value * vatInPorcentage).toFixed(2));
+                  valueAddedVATControl?.setValue(vatToPay, defaultValue);
+                  priceInclVATControl?.setValue(parseFloat((vatToPay + values.value).toFixed(2)), defaultValue);
+                  
+                  
+                }else if(values.name == 'withoutVAT' && !values.value){
+                  
+                  valueAddedVATControl?.setValue(null, defaultValue);
+                  priceInclVATControl?.setValue(null, defaultValue);
+                  
+              }
+              if (values.name == 'valueAddedVAT' && values.value && values.value !=0) {
+                const addedVat:number =parseFloat(values.value.toFixed(2));
+               
+                  const WithoutAVATTOPay:number = parseFloat((addedVat / vatInPorcentage).toFixed(2));
+                  withoutVATControl?.setValue(WithoutAVATTOPay, defaultValue);
+                  priceInclVATControl?.setValue( addedVat + WithoutAVATTOPay, defaultValue );
+                
+              }else if(values.name == 'valueAddedVAT' && (!values.value || values.value ==0)){
+                withoutVATControl?.setValue(null, defaultValue);
+                  priceInclVATControl?.setValue(null,  defaultValue   );
+              }
+              if (values.name == 'priceInclVAT' && values.value) {
+                const total:number = parseFloat(values.value.toFixed(2));
+                const valueAdded:number = parseFloat((total * vatInPorcentage).toFixed(2));
+                valueAddedVATControl?.setValue(valueAdded, defaultValue);
+                withoutVATControl?.setValue(parseFloat((total-valueAdded).toFixed(2)), defaultValue);
+              }else if(values.name == 'priceInclVAT' && !values.value){
+                valueAddedVATControl?.setValue(null, defaultValue);
+                withoutVATControl?.setValue(null, defaultValue);
+              }
+            })
+          );
+        })
+      )
+      .subscribe();
+
     /*this.selectedTax = this.selected.pipe(
       
       map((value) => {
@@ -145,5 +189,12 @@ export class VatCalculatorComponent implements OnInit {
         );
       })
     );*/
+  }
+
+  ngOnDestroy(): void {
+    if (!this.destroySignal.closed) {
+      this.destroySignal.next();
+    }
+    this.destroySignal.unsubscribe();
   }
 }
