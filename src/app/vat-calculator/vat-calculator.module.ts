@@ -1,3 +1,4 @@
+import { VatBusinessLogicService } from './services/vat-business-logic.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -8,7 +9,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { VatCalculatorComponent } from './vat-calculator.component';
-import { VatCalculatorService } from './vat-calculator.service';
+import { VatCalculatorService } from './services/vat-calculator.service';
 import { VATRoutingModule } from './vat-routing.module';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
@@ -27,6 +28,6 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
    MatSlideToggleModule
   ],
   exports: [VatCalculatorComponent],
-  providers: [VatCalculatorService],
+  providers: [VatCalculatorService, VatBusinessLogicService],
 })
 export class VatCalculatorModule { }

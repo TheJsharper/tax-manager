@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { Country, sortDirection } from './models/vat-country.models';
+import { Country, sortDirection } from '../models/vat-country.models';
 
 
 @Injectable()
