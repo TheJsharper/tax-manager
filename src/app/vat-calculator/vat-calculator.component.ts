@@ -51,6 +51,7 @@ export class VatCalculatorComponent implements OnInit, OnDestroy {
     this.vatBusinessLogicService.swichtSlideToggle(this.destroySignal, defaultValue);
 
     this.vatBusinessLogicService.calculateDefaultVAT(this.destroySignal, defaultValue, this.selected);
+    
     this.vatBusinessLogicService.calculateNextVat(this.destroySignal, defaultValue)
 
 
