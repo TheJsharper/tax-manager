@@ -172,11 +172,11 @@ export class VatCalculatorComponent implements OnInit, OnDestroy {
         if (values.name == 'withoutVAT' && values.value && values.value != 0) {
 
           const vatToPay: number = parseFloat((values.value * vatInPorcentage).toFixed(2));
+          const totalPrice: number = parseFloat((vatToPay + values.value).toFixed(2));
 
-          const totalPrice:number = parseFloat((vatToPay + values.value).toFixed(2)); 
           valueAddedVATControl?.setValue(vatToPay, defaultValue);
           priceInclVATControl?.setValue(totalPrice, defaultValue);
-          paidInPorcentageControl?.setValue(vatToPay/totalPrice, defaultValue);
+          paidInPorcentageControl?.setValue(parseFloat((vatToPay / totalPrice).toFixed(2)), defaultValue);
 
 
         } else if (values.name == 'withoutVAT' && (!values.value || values.value == 0)) {
@@ -190,10 +190,11 @@ export class VatCalculatorComponent implements OnInit, OnDestroy {
           const addedVat: number = parseFloat(values.value.toFixed(2));
 
           const WithoutAVATTOPay: number = parseFloat((addedVat / vatInPorcentage).toFixed(2));
-          const totalPrice:number =addedVat + WithoutAVATTOPay;
+          const totalPrice: number = addedVat + WithoutAVATTOPay;
+
           withoutVATControl?.setValue(WithoutAVATTOPay, defaultValue);
           priceInclVATControl?.setValue(totalPrice, defaultValue);
-          paidInPorcentageControl?.setValue(parseFloat((addedVat /totalPrice).toFixed(2)), defaultValue);
+          paidInPorcentageControl?.setValue(parseFloat((addedVat / totalPrice).toFixed(2)), defaultValue);
 
         } else if (values.name == 'valueAddedVAT' && (!values.value || values.value == 0)) {
           withoutVATControl?.setValue(null, defaultValue);
@@ -203,7 +204,7 @@ export class VatCalculatorComponent implements OnInit, OnDestroy {
         if (values.name == 'priceInclVAT' && values.value) {
           const total: number = parseFloat(values.value.toFixed(2));
           const valueAdded: number = parseFloat((total * vatInPorcentage).toFixed(2));
-          
+
           valueAddedVATControl?.setValue(valueAdded, defaultValue);
           withoutVATControl?.setValue(parseFloat((total - valueAdded).toFixed(2)), defaultValue);
 
@@ -215,60 +216,6 @@ export class VatCalculatorComponent implements OnInit, OnDestroy {
     ).subscribe();
 
 
-  }
-
-  private codeCommented(): void {
-    /*const sel= this.selected
-       .pipe(
-         mergeMap((country: Country | undefined) => {
-          return   this.formGroup.get("labelPosition")!.valueChanges.pipe(map((value:number)=>({name:"labelPosition",value}))).pipe(map((values:{name:string, value:number})=>{
-             if(values.name=="labelPosition" && country?.tax && country.tax.taxes.length>0){
-               const porcentage:number =country?.tax?.taxes[values.value].value!;
-               const v = porcentage/100;
-               return {...values, value:v};
-             }else{
-               return {...values, value:0};
-             }
-           }))
-         }),
-         tap((values:{name:string, value:number})=>{
-           this.formGroup.get("selectedPorcentageTax")?.setValue(values.value);
-         })
-       ).subscribe();
-       const sel= this.formGroup.get("labelPosition")!.valueChanges.pipe(map((value:number)=>({name:"labelPosition",value})))
-       .pipe(
-         switchMap((values:{name:string, value:number}) => {
-          return  this.selected.pipe(map((country:Country|undefined)=>{
-           if(values.name=="labelPosition" && country?.tax && country.tax.taxes.length>0){
-             const porcentage:number =country?.tax?.taxes[values.value].value!;
-             const v = porcentage/100;
-             return {...values, value:v};
-           }else{
-             return {...values, value:0};
-           }
-           }))
-          }),
-         tap((values:{name:string, value:number})=>{
-           this.formGroup.get("selectedPorcentageTax")?.setValue(values.value);
-         })).subscribe();
- */
-    /*  const b = combineLatest( [
-         this.formGroup.get("labelPosition")!.valueChanges.pipe(map<any, {name:string,value:number}>((value:number)=>({name:"labelPosition",value})))
-         ,this.selected]
-       ).pipe(map((values:[  {name:string,value:number},Country | undefined])=>{
-         if(values[0].name=="labelPosition" && values[1]?.tax && values[1].tax.taxes.length>0){
-           const porcentage:number =values[1].tax?.taxes[values[0].value].value!;
-           const v = porcentage/100;
-           return {name:values[0].name, value:v};
-         }else{
-           return {name:values[0].name, value:0};
-         }
-       }),
-       tap((values:{name:string, value:number})=>{
-         this.formGroup.get("selectedPorcentageTax")?.setValue(values.value);
-       })
-       ).subscribe();
-     */
   }
 
   ngOnDestroy(): void {

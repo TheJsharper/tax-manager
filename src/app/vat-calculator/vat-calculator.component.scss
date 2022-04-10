@@ -1,6 +1,7 @@
 :host {
     display: flex;
     justify-content: center;
+    margin-top: .5rem;
     .form-container {
         display: flex;
         flex-direction: column;
@@ -10,9 +11,10 @@
     .row-form {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
-        mat-label{
+        mat-label, mat-slide-toggle, mat-radio-group{
             align-self: center;
         }
+        
     }
 }
 .img-layout {
