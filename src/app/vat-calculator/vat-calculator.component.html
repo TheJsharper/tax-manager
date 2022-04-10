@@ -1,33 +1,44 @@
-<div [formGroup]="formGroup" style="display: flex; flex-direction: column;">
-  <mat-form-field appearance="fill" *ngIf="countries as countriesList">
-    <mat-label>Country</mat-label>
-    <mat-select formControlName="selected">
-      <mat-option *ngFor="let country of (countriesList | async)" [value]="country">
-        <ng-container [ngTemplateOutlet]="content" [ngTemplateOutletContext]="{food: country}">
-        </ng-container>
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <p *ngIf="selected as selectedCountry">You selected: {{ (selectedCountry | async)?.name?.common }}</p>
+<div [formGroup]="formGroup" class="form-container">
 
 
-  <mat-radio-group formControlName="labelPosition">
-   <mat-radio-button *ngFor="let t of (selected |async)?.tax?.taxes let i = index;" [value]="i" >
-      {{t.porcentage}}</mat-radio-button>
+  <div class="row-form">
 
-  </mat-radio-group>
+    <mat-form-field appearance="fill" *ngIf="countries as countriesList">
+      <mat-label>Country</mat-label>
+      <mat-select formControlName="selected">
+        <mat-option *ngFor="let country of (countriesList | async)" [value]="country">
+          <ng-container [ngTemplateOutlet]="content" [ngTemplateOutletContext]="{food: country}">
+          </ng-container>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-  <div style="display: flex; justify-content: space-evenly;">
+
+  </div>
+
+  <div class="row-form">
+    <p *ngIf="selected as selectedCountry">Taxes:</p>
+    <mat-radio-group formControlName="labelPosition">
+      <mat-radio-button *ngFor="let t of (selected |async)?.tax?.taxes let i = index;" [value]="i">
+        {{t.porcentage}}</mat-radio-button>
+
+    </mat-radio-group>
+
+  </div>
+
+
+
+  <div class="row-form">
 
     <mat-slide-toggle [formControlName]="'byWithoutVAT'">Price without VAT</mat-slide-toggle>
     <mat-form-field appearance="fill">
       <input type="number" matInput formControlName="withoutVAT" [readonly]="!(formGroup.get('byWithoutVAT')?.value)">
     </mat-form-field>
-    <mat-label *ngIf="formGroup.get('selectedPorcentageTax')?.value" >{{formGroup.get("selectedPorcentageTax")?.value}}%</mat-label>
+    <mat-label *ngIf="formGroup.get('selectedPorcentageTax')?.value">{{formGroup.get("selectedPorcentageTax")?.value}}%
+    </mat-label>
   </div>
 
-  <div style="display: flex; justify-content: space-evenly;">
+  <div class="row-form">
 
     <mat-slide-toggle [formControlName]="'byValueAddedVAT'">Value-added VAT</mat-slide-toggle>
     <mat-form-field appearance="fill">
@@ -36,14 +47,18 @@
     </mat-form-field>
   </div>
 
-  <div style="display: flex; justify-content: space-evenly;">
+  <div class="row-form">
 
-    <mat-slide-toggle [formControlName]="'byPriceInclVAT'">Price incl. VAT</mat-slide-toggle>
-    <mat-form-field appearance="fill">
-      <input type="number" matInput formControlName="priceInclVAT"
-        [readonly]="!(formGroup.get('byPriceInclVAT')?.value)">
-    </mat-form-field>
-    <mat-label *ngIf="formGroup.get('paidInPorcentage')?.value"  >{{formGroup.get("paidInPorcentage")?.value}}%</mat-label>
+    
+
+      <mat-slide-toggle [formControlName]="'byPriceInclVAT'">Price incl. VAT</mat-slide-toggle>
+      <mat-form-field appearance="fill">
+        <input type="number" matInput formControlName="priceInclVAT"
+          [readonly]="!(formGroup.get('byPriceInclVAT')?.value)">
+      </mat-form-field>
+      <mat-label *ngIf="formGroup.get('paidInPorcentage')?.value">{{formGroup.get("paidInPorcentage")?.value}}%
+      </mat-label>
+    
   </div>
 
 
@@ -51,8 +66,8 @@
 
 
 <ng-template #content let-food="food">
-  <div style="display: flex; justify-content: space-between; align-items: center;">
-    <img [src]="food.flags.svg" style="border-radius:15% ; width: 50px;">
+  <div class="img-layout">
+    <img [src]="food.flags.svg" class="img-flag">
     <div>
       {{food.name.common}} </div>
   </div>
