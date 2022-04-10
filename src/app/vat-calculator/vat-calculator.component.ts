@@ -33,13 +33,12 @@ import { VatCalculatorService } from './vat-calculator.service';
   selector: 'vat-calculator',
   templateUrl: './vat-calculator.component.html',
   styleUrls: ['./vat-calculator.component.scss'],
-  //changeDetection:ChangeDetectionStrategy.OnPush
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class VatCalculatorComponent implements OnInit, OnDestroy {
   selected!: Observable<Country | undefined>;
   countries!: Observable<Array<Country>>;
   formGroup!: FormGroup;
-  selectedTax!: Observable<number>;
 
   private destroySignal: Subject<void>;
 
@@ -53,16 +52,16 @@ export class VatCalculatorComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     this.formGroup = this.fb.group({
       selected: new FormControl(''),
-      labelPosition: new FormControl(0),
-      withoutVAT: new FormControl(20),
+      labelPosition: new FormControl(),
+      withoutVAT: new FormControl(),
       byWithoutVAT: new FormControl(true),
 
       selectedPorcentageTax: new FormControl(null),
 
-      valueAddedVAT: new FormControl(20),
+      valueAddedVAT: new FormControl(),
       byValueAddedVAT: new FormControl(false),
 
-      priceInclVAT: new FormControl(20),
+      priceInclVAT: new FormControl(),
       byPriceInclVAT: new FormControl(false),
     });
 
@@ -75,9 +74,7 @@ export class VatCalculatorComponent implements OnInit, OnDestroy {
       selectedCountry,
       this.formGroup.get('selected')!.valueChanges
     );
-    //this.selected.subscribe(console.log);
-
-    //this.selectedTax.subscribe((v) => console.log('===>x', v));
+    
 
     const byWithoutVATControl = this.formGroup.get('byWithoutVAT');
     const withoutVATControl = this.formGroup.get('withoutVAT');
@@ -140,7 +137,7 @@ export class VatCalculatorComponent implements OnInit, OnDestroy {
         tap((values:{name:string, value:number})=>{
           this.formGroup.get("selectedPorcentageTax")?.setValue(values.value);
         })
-      ).subscribe();*/
+      ).subscribe();
       const sel= this.formGroup.get("labelPosition")!.valueChanges.pipe(map((value:number)=>({name:"labelPosition",value})))
       .pipe(
         switchMap((values:{name:string, value:number}) => {
@@ -157,6 +154,38 @@ export class VatCalculatorComponent implements OnInit, OnDestroy {
         tap((values:{name:string, value:number})=>{
           this.formGroup.get("selectedPorcentageTax")?.setValue(values.value);
         })).subscribe();
+*/
+     /*  const b = combineLatest( [
+          this.formGroup.get("labelPosition")!.valueChanges.pipe(map<any, {name:string,value:number}>((value:number)=>({name:"labelPosition",value})))
+          ,this.selected]
+        ).pipe(map((values:[  {name:string,value:number},Country | undefined])=>{
+          if(values[0].name=="labelPosition" && values[1]?.tax && values[1].tax.taxes.length>0){
+            const porcentage:number =values[1].tax?.taxes[values[0].value].value!;
+            const v = porcentage/100;
+            return {name:values[0].name, value:v};
+          }else{
+            return {name:values[0].name, value:0};
+          }
+        }),
+        tap((values:{name:string, value:number})=>{
+          this.formGroup.get("selectedPorcentageTax")?.setValue(values.value);
+        })
+        ).subscribe();
+      */  this.formGroup.get("labelPosition")!.valueChanges.pipe(map<any, {name:string,value:number}>((value:number)=>({name:"labelPosition",value}))).pipe(
+          withLatestFrom(this.selected),
+          map((values)=>{
+            if(values[0].name=="labelPosition" && values[1]?.tax && values[1].tax.taxes.length>0){
+              const porcentage:number =values[1].tax?.taxes[values[0].value].value!;
+              const v = porcentage/100;
+              return {name:values[0].name, value:v};
+            }else{
+              return {name:values[0].name, value:0};
+            }
+          }),
+          tap((values:{name:string, value:number})=>{
+            this.formGroup.get("selectedPorcentageTax")?.setValue(values.value);
+          })
+        ).subscribe();
 
     const mergedInputs: Observable<{ name: string; value: number }> = merge(
       withoutVATControl!.valueChanges.pipe(
@@ -169,8 +198,8 @@ export class VatCalculatorComponent implements OnInit, OnDestroy {
       priceInclVATControl!.valueChanges.pipe(
         map((value: number) => ({ name: 'priceInclVAT', value }))
       )
-      //this.formGroup.get("labelPosition")!.valueChanges.pipe(map((value:number)=>({name:"labelPosition",value})))
-    );
+      
+      );
    
     
      
