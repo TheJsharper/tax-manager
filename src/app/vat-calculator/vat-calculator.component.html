@@ -13,11 +13,7 @@
 
 
   <mat-radio-group formControlName="labelPosition">
-    <!--<mat-radio-button
-     *ngFor="let t of (selected |async)?.tax?.taxes"
-     
-     >{{t.porcentage}}</mat-radio-button>-->
-    <!----><mat-radio-button *ngFor="let t of (selected |async)?.tax?.taxes let i = index;" [value]="i" >
+   <mat-radio-button *ngFor="let t of (selected |async)?.tax?.taxes let i = index;" [value]="i" >
       {{t.porcentage}}</mat-radio-button>
 
   </mat-radio-group>
@@ -28,8 +24,7 @@
     <mat-form-field appearance="fill">
       <input type="number" matInput formControlName="withoutVAT" [readonly]="!(formGroup.get('byWithoutVAT')?.value)">
     </mat-form-field>
-    <!--<mat-label *ngIf="selectedTax| async as sel">{{sel}}</mat-label>-->
-    <mat-label >{{formGroup.get("selectedPorcentageTax")?.value}}</mat-label>
+    <mat-label *ngIf="formGroup.get('selectedPorcentageTax')?.value" >{{formGroup.get("selectedPorcentageTax")?.value}}%</mat-label>
   </div>
 
   <div style="display: flex; justify-content: space-evenly;">
@@ -48,6 +43,7 @@
       <input type="number" matInput formControlName="priceInclVAT"
         [readonly]="!(formGroup.get('byPriceInclVAT')?.value)">
     </mat-form-field>
+    <mat-label *ngIf="formGroup.get('paidInPorcentage')?.value"  >{{formGroup.get("paidInPorcentage")?.value}}%</mat-label>
   </div>
 
 
