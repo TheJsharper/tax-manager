@@ -75,30 +75,33 @@ export class VatBusinessLogicService {
     }, selected: Observable<Country | undefined>): void {
 
 
-        this.controls.get("labelPosition")!.valueChanges.pipe(map<any, { name: string, value: number }>((value: number) => ({ name: "labelPosition", value }))).pipe(
-            takeUntil(destroySignal),
-            withLatestFrom(selected),
-            map((values) => {
-                if (values[0].name == "labelPosition" && values[1]?.tax && values[1].tax.taxes.length > 0) {
-                    const porcentage: number = values[1].tax?.taxes[values[0].value].value!;
-                    const v = porcentage / 100;
-                    return { name: values[0].name, value: v };
-                } else {
-                    return { name: values[0].name, value: 0 };
-                }
-            }),
-            tap((values: { name: string, value: number }) => {
-                this.controls.get("selectedPorcentageTax")?.setValue(values.value);
-                const porcentage: number = values.value;
-                const currentValue: number = this.controls.get("withoutVAT")?.value;
-                if (currentValue) {
-                    const vatToPay: number = parseFloat((currentValue * porcentage).toFixed(2));
-                    this.controls.get('valueAddedVAT')?.setValue(vatToPay, defaultValue);
-                    this.controls.get('priceInclVAT')?.setValue(parseFloat((vatToPay + currentValue).toFixed(2)), defaultValue);
-                }
+        this.controls.get("labelPosition")!.valueChanges.pipe(
+            map<any, { name: string, value: number }>((value: number) => ({ name: "labelPosition", value })))
+            .pipe(
+                takeUntil(destroySignal),
+                withLatestFrom(selected),
+                map((values) => {
+                    if (values[0].name == "labelPosition" && values[1]?.tax && values[1].tax.taxes.length > 0) {
+                        const porcentage: number = values[1].tax?.taxes[values[0].value].value!;
+                        const v = porcentage / 100;
+                        return { name: values[0].name, value: v };
+                    } else {
+                        return { name: values[0].name, value: 0 };
+                    }
+                }),
+                tap((values: { name: string, value: number }) => {
+                    this.controls.get("selectedPorcentageTax")?.setValue(values.value);
+                    const porcentage: number = values.value;
+                    const currentValue: number = this.controls.get("withoutVAT")?.value;
+                    if (currentValue) {
+                        const vatToPay: number = parseFloat((currentValue * porcentage).toFixed(2));
+                        this.controls.get('valueAddedVAT')?.setValue(vatToPay, defaultValue);
+                        this.controls.get('priceInclVAT')?.setValue(parseFloat((vatToPay + currentValue).toFixed(2)), defaultValue);
+                        this.controls.get('paidInPorcentage')?.setValue(parseFloat((vatToPay / currentValue).toFixed(2)), defaultValue);
+                    }
 
-            })
-        ).subscribe();
+                })
+            ).subscribe();
     }
 
     private getMergeInouts(): Observable<{ name: string; value: number }> {
@@ -167,16 +170,18 @@ export class VatBusinessLogicService {
                     priceInclVATControl?.setValue(null, defaultValue);
                     paidInPorcentageControl?.setValue(null, defaultValue);
                 }
-                if (values.name == 'priceInclVAT' && values.value) {
+                if (values.name == 'priceInclVAT' && values.value && values.value != 0) {
                     const total: number = parseFloat(values.value.toFixed(2));
                     const valueAdded: number = parseFloat((total * vatInPorcentage).toFixed(2));
 
                     valueAddedVATControl?.setValue(valueAdded, defaultValue);
                     withoutVATControl?.setValue(parseFloat((total - valueAdded).toFixed(2)), defaultValue);
+                    paidInPorcentageControl?.setValue(parseFloat((valueAdded / total).toFixed(2)), defaultValue);
 
-                } else if (values.name == 'priceInclVAT' && !values.value) {
+                } else if (values.name == 'priceInclVAT' && (!values.value || values.value == 0)) {
                     valueAddedVATControl?.setValue(null, defaultValue);
                     withoutVATControl?.setValue(null, defaultValue);
+                    paidInPorcentageControl?.setValue(null, defaultValue);
                 }
             })
         ).subscribe()
