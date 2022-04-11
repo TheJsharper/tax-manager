@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { AbstractControl, FormBuilder, FormControl, FormGroup } from "@angular/forms";
-import { combineLatest, filter, forkJoin, fromEvent, iif, map, merge, mergeMap, Observable, Subject, switchMap, take, takeUntil, tap, withLatestFrom, zip } from "rxjs";
+import { fromEvent, map, merge, Observable, Subject, takeUntil, tap, withLatestFrom } from "rxjs";
 import { Country } from "../models/vat-country.models";
 
 @Injectable()
@@ -190,7 +190,7 @@ export class VatBusinessLogicService {
         ).subscribe()
 
     }
-    resetForm(nativeElement: any, destroySignal: Subject<void>) {
+  public resetForm(nativeElement: any, destroySignal: Subject<void>) {
         fromEvent(nativeElement, "click").pipe(
             takeUntil(destroySignal),
             tap(() =>

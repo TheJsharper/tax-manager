@@ -5,14 +5,17 @@
 
     <mat-form-field appearance="fill" *ngIf="countries as countriesList">
       <mat-label>Country</mat-label>
-      <mat-select formControlName="selected">
+      <mat-select [formControlName]="'selected'">
         <mat-option *ngFor="let country of (countriesList | async)" [value]="country">
           <ng-container [ngTemplateOutlet]="content" [ngTemplateOutletContext]="{food: country}">
           </ng-container>
         </mat-option>
       </mat-select>
     </mat-form-field>
+    <div class="selected-country-view" *ngIf="selected | async as country ">
 
+      <ng-container [ngTemplateOutlet]="content" [ngTemplateOutletContext]="{food: country}"> </ng-container>
+    </div>
 
   </div>
 
@@ -49,16 +52,16 @@
 
   <div class="row-form">
 
-    
 
-      <mat-slide-toggle [formControlName]="'byPriceInclVAT'">Price incl. VAT</mat-slide-toggle>
-      <mat-form-field appearance="fill">
-        <input type="number" matInput formControlName="priceInclVAT"
-          [readonly]="!(formGroup.get('byPriceInclVAT')?.value)">
-      </mat-form-field>
-      <mat-label *ngIf="formGroup.get('paidInPorcentage')?.value">{{formGroup.get("paidInPorcentage")?.value}}%
-      </mat-label>
-    
+
+    <mat-slide-toggle [formControlName]="'byPriceInclVAT'">Price incl. VAT</mat-slide-toggle>
+    <mat-form-field appearance="fill">
+      <input type="number" matInput formControlName="priceInclVAT"
+        [readonly]="!(formGroup.get('byPriceInclVAT')?.value)">
+    </mat-form-field>
+    <mat-label *ngIf="formGroup.get('paidInPorcentage')?.value">{{formGroup.get("paidInPorcentage")?.value}}%
+    </mat-label>
+
   </div>
   <button #resetBtn mat-raised-button color="primary" [disabled]="formGroup.pristine">Reset</button>
 

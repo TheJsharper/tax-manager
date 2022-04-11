@@ -1,3 +1,4 @@
+import { ValueConverter } from '@angular/compiler/src/render3/view/template';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -8,11 +9,8 @@ import {
   ViewChild
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { MatButton } from '@angular/material/button';
 import {
-  from,
-  fromEvent,
-  merge, Observable, Subject, takeUntil, tap
+  merge, Observable, Subject, tap
 } from 'rxjs';
 import { Country } from './models/vat-country.models';
 import { VatBusinessLogicService } from './services/vat-business-logic.service';
@@ -55,6 +53,7 @@ export class VatCalculatorComponent implements OnInit, OnDestroy, AfterViewInit 
       selectedCountry,
       this.formGroup.get('selected')!.valueChanges
     );
+
     const defaultValue = {
       onlySelf: true,
       emitEvent: false,
@@ -64,7 +63,7 @@ export class VatCalculatorComponent implements OnInit, OnDestroy, AfterViewInit 
     this.vatBusinessLogicService.calculateDefaultVAT(this.destroySignal, defaultValue, this.selected);
     
     this.vatBusinessLogicService.calculateNextVat(this.destroySignal, defaultValue)
-
+    //this.selected.pipe(tap((value)=> {this.formGroup.get("selected")?.setValue(value?.name.common, defaultValue)} )).subscribe(console.log)
 
   }
   
