@@ -1,10 +1,11 @@
 import { Injectable } from "@angular/core";
 import { AbstractControl, FormBuilder, FormControl, FormGroup } from "@angular/forms";
-import { map, merge, Observable, Subject, takeUntil, tap, withLatestFrom } from "rxjs";
+import { combineLatest, filter, forkJoin, fromEvent, iif, map, merge, mergeMap, Observable, Subject, switchMap, take, takeUntil, tap, withLatestFrom, zip } from "rxjs";
 import { Country } from "../models/vat-country.models";
 
 @Injectable()
 export class VatBusinessLogicService {
+
 
     private controls!: Map<string, AbstractControl>;
     constructor(private fb: FormBuilder) { }
@@ -33,7 +34,9 @@ export class VatBusinessLogicService {
         emitEvent: boolean,
     }): void {
         const byWithoutVATControl = this.controls.get('byWithoutVAT')!;
+
         const byValueAddedVATControl = this.controls.get('byValueAddedVAT')!;
+
         const byPriceInclVATControl = this.controls.get('byPriceInclVAT')!;
         const merged = merge(
             byWithoutVATControl!.valueChanges.pipe(
@@ -186,5 +189,17 @@ export class VatBusinessLogicService {
             })
         ).subscribe()
 
+    }
+    resetForm(nativeElement: any, destroySignal: Subject<void>) {
+        fromEvent(nativeElement, "click").pipe(
+            takeUntil(destroySignal),
+            tap(() =>
+                Array.from(this.controls.entries())
+                    .filter((values: [string, AbstractControl]) => values[0] != "select" && !values[0].startsWith("by"))
+                    .map((values: [string, AbstractControl]) => values[1].reset(null, {
+                        onlySelf: true,
+                        emitEvent: false,
+                    }))
+            )).subscribe();
     }
 }

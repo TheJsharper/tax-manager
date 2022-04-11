@@ -2,25 +2,36 @@
     display: flex;
     justify-content: center;
     margin-top: .5rem;
+
+    .mat-raised-button {
+        align-self: flex-end;
+    }
+
     .form-container {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: stretch;
     }
+
     .row-form {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
-        mat-label, mat-slide-toggle, mat-radio-group{
+
+        mat-label,
+        mat-slide-toggle,
+        mat-radio-group {
             align-self: center;
         }
-        
+
     }
 }
+
 .img-layout {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     .img-flag {
         border-radius: 15%;
         width: 50px;

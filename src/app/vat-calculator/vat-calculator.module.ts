@@ -11,21 +11,23 @@ import { MatInputModule } from '@angular/material/input';
 import { VatCalculatorComponent } from './vat-calculator.component';
 import { VatCalculatorService } from './services/vat-calculator.service';
 import { VATRoutingModule } from './vat-routing.module';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [VatCalculatorComponent],
-  imports: [CommonModule, ReactiveFormsModule, 
+  imports: [CommonModule, ReactiveFormsModule,
     MatSelectModule,
-    VATRoutingModule, 
+    VATRoutingModule,
     HttpClientModule,
     MatFormFieldModule,
-   MatRadioModule, 
-   MatIconModule, 
-   MatInputModule,
-   MatCheckboxModule,
-   MatSlideToggleModule
+    MatRadioModule,
+    MatIconModule,
+    MatInputModule,
+    MatCheckboxModule,
+    MatSlideToggleModule, 
+    MatButtonModule,
   ],
   exports: [VatCalculatorComponent],
   providers: [VatCalculatorService, VatBusinessLogicService],
