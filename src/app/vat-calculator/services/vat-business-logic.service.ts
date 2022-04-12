@@ -9,7 +9,9 @@ export class VatBusinessLogicService {
 
 
     private controls!: Map<string, AbstractControl>;
+
     constructor(private fb: FormBuilder) { }
+    
     public getInitFormGroup(): FormGroup {
         const formGroup: FormGroup = this.fb.group({
             selected: new FormControl(),

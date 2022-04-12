@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import {
-  merge, Observable, Subject
+  merge, Observable, Subject, tap
 } from 'rxjs';
 import { VatAnimation } from './animations/vat.animate';
 import { Country } from './models/vat-country.models';
@@ -35,14 +35,14 @@ export class VatCalculatorComponent implements OnInit, OnDestroy, AfterViewInit 
 
   constructor(
     private vatCalculatorService: VatCalculatorService,
-    private vatBusinessLogicService: VatBusinessLogicService,
+    private vatBusinessLogicService: VatBusinessLogicService
 
   ) {
     this.destroySignal = new Subject<void>();
   }
 
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
 
     this.formGroup = this.vatBusinessLogicService.getInitFormGroup();
 
@@ -63,8 +63,7 @@ export class VatCalculatorComponent implements OnInit, OnDestroy, AfterViewInit 
 
     this.vatBusinessLogicService.calculateDefaultVAT(this.destroySignal, defaultValue, this.selected);
 
-    this.vatBusinessLogicService.calculateNextVat(this.destroySignal, defaultValue)
-    //this.selected.pipe(tap((value)=> {this.formGroup.get("selected")?.setValue(value?.name.common, defaultValue)} )).subscribe(console.log)
+    this.vatBusinessLogicService.calculateNextVat(this.destroySignal, defaultValue);
 
   }
 
