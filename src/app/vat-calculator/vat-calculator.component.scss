@@ -60,10 +60,13 @@ $theme: mat-light-theme($primary, $accent, $warn);
             background-color: mat-color($primary) ;
         }
         ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
-            background-color: mat-color($primary)
+            background-color: mat-color($primary);
         }
         ::ng-deep .mat-slide-toggle.mat-checked .mat-ripple-element{
-            background-color: mat-color($primary)
+            background-color: mat-color($primary);
+        }
+        ::ng-deep .mat-form-field-ripple{
+            background-color: mat-color($primary);
         }
     }
 }
