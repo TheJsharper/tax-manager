@@ -5,6 +5,7 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
+  Renderer2,
   ViewChild
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
@@ -14,6 +15,7 @@ import {
 import { VatAnimation } from './animations/vat.animate';
 import { Country } from './models/vat-country.models';
 import { VatBusinessLogicService } from './services/vat-business-logic.service';
+import { VatCalculatorChartService } from './services/vat-calculator-chart.service';
 import { VatCalculatorService } from './services/vat-calculator.service';
 
 @Component({
@@ -32,10 +34,13 @@ export class VatCalculatorComponent implements OnInit, OnDestroy, AfterViewInit 
   private destroySignal: Subject<void>;
 
   @ViewChild('resetBtn', { read: ElementRef }) resetBtn!: ElementRef;
+  @ViewChild('resetBtn', { read: ElementRef }) chartWrapper!: ElementRef;
 
   constructor(
     private vatCalculatorService: VatCalculatorService,
-    private vatBusinessLogicService: VatBusinessLogicService
+    private vatBusinessLogicService: VatBusinessLogicService,
+    private vatCalulatorChartService:VatCalculatorChartService,
+    private renderer:Renderer2
 
   ) {
     this.destroySignal = new Subject<void>();
@@ -69,6 +74,12 @@ export class VatCalculatorComponent implements OnInit, OnDestroy, AfterViewInit 
 
   ngAfterViewInit(): void {
     this.vatBusinessLogicService.resetForm(this.resetBtn.nativeElement, this.destroySignal);
+    if(this.chartWrapper){
+      const chart = this.vatCalulatorChartService.getChart();
+      this.renderer.appendChild(this.chartWrapper, chart);
+
+    }
+
   }
   ngOnDestroy(): void {
     if (!this.destroySignal.closed) {

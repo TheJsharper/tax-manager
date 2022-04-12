@@ -14,6 +14,7 @@ import { VATRoutingModule } from './vat-routing.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
+import { VatCalculatorChartService } from './services/vat-calculator-chart.service';
 
 @NgModule({
   declarations: [VatCalculatorComponent],
@@ -30,6 +31,6 @@ import { MatButtonModule } from '@angular/material/button';
     MatButtonModule,
   ],
   exports: [VatCalculatorComponent],
-  providers: [VatCalculatorService, VatBusinessLogicService],
+  providers: [VatCalculatorService, VatBusinessLogicService, VatCalculatorChartService],
 })
 export class VatCalculatorModule { }
