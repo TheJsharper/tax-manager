@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { AbstractControl, FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { fromEvent, map, merge, Observable, Subject, takeUntil, tap, withLatestFrom } from "rxjs";
 import { Country } from "../models/vat-country.models";
+import { VatValidators } from "../validators/vat-validators";
 
 @Injectable()
 export class VatBusinessLogicService {
@@ -11,7 +12,7 @@ export class VatBusinessLogicService {
     constructor(private fb: FormBuilder) { }
     public getInitFormGroup(): FormGroup {
         const formGroup: FormGroup = this.fb.group({
-            selected: new FormControl(''),
+            selected: new FormControl(),
             labelPosition: new FormControl(),
             withoutVAT: new FormControl(),
             byWithoutVAT: new FormControl(true),
@@ -25,7 +26,7 @@ export class VatBusinessLogicService {
             byPriceInclVAT: new FormControl(false),
 
             paidInPorcentage: new FormControl()
-        });
+        }, { validators: [VatValidators.isNotPorcentageChoosen] });
         this.controls = new Map<string, AbstractControl>(Object.entries(formGroup.controls));
         return formGroup;
     }
@@ -190,7 +191,7 @@ export class VatBusinessLogicService {
         ).subscribe()
 
     }
-  public resetForm(nativeElement: any, destroySignal: Subject<void>) {
+    public resetForm(nativeElement: any, destroySignal: Subject<void>) {
         fromEvent(nativeElement, "click").pipe(
             takeUntil(destroySignal),
             tap(() =>

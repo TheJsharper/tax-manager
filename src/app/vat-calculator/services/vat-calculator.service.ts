@@ -4,9 +4,12 @@ import { map, Observable } from 'rxjs';
 import { Country, sortDirection } from '../models/vat-country.models';
 
 
+
 @Injectable()
 export class VatCalculatorService {
-    constructor(private httpClient: HttpClient) { }
+    constructor(private httpClient: HttpClient) { 
+       
+    }
 
     public getSortedAscCountries(): Observable<Array<Country>> {
         const countries$: Observable<Array<Country>> = this.httpClient.get<Array<Country>>("/assets/output/taxed-all-countries.json");

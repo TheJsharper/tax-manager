@@ -1,4 +1,3 @@
-import { ValueConverter } from '@angular/compiler/src/render3/view/template';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -10,8 +9,9 @@ import {
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import {
-  merge, Observable, Subject, tap
+  merge, Observable, Subject
 } from 'rxjs';
+import { VatAnimation } from './animations/vat.animate';
 import { Country } from './models/vat-country.models';
 import { VatBusinessLogicService } from './services/vat-business-logic.service';
 import { VatCalculatorService } from './services/vat-calculator.service';
@@ -20,17 +20,18 @@ import { VatCalculatorService } from './services/vat-calculator.service';
   selector: 'vat-calculator',
   templateUrl: './vat-calculator.component.html',
   styleUrls: ['./vat-calculator.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [VatAnimation.errorAnimation()]
 })
 export class VatCalculatorComponent implements OnInit, OnDestroy, AfterViewInit {
   selected!: Observable<Country | undefined>;
   countries!: Observable<Array<Country>>;
   formGroup!: FormGroup;
 
-  
+
   private destroySignal: Subject<void>;
-  
-  @ViewChild('resetBtn', { read: ElementRef }) resetBtn!:ElementRef;
+
+  @ViewChild('resetBtn', { read: ElementRef }) resetBtn!: ElementRef;
 
   constructor(
     private vatCalculatorService: VatCalculatorService,
@@ -39,10 +40,10 @@ export class VatCalculatorComponent implements OnInit, OnDestroy, AfterViewInit 
   ) {
     this.destroySignal = new Subject<void>();
   }
- 
+
 
   async ngOnInit(): Promise<void> {
-   
+
     this.formGroup = this.vatBusinessLogicService.getInitFormGroup();
 
     this.countries = this.vatCalculatorService.getSortedAscCountries();
@@ -61,12 +62,12 @@ export class VatCalculatorComponent implements OnInit, OnDestroy, AfterViewInit 
     this.vatBusinessLogicService.swichtSlideToggle(this.destroySignal, defaultValue);
 
     this.vatBusinessLogicService.calculateDefaultVAT(this.destroySignal, defaultValue, this.selected);
-    
+
     this.vatBusinessLogicService.calculateNextVat(this.destroySignal, defaultValue)
     //this.selected.pipe(tap((value)=> {this.formGroup.get("selected")?.setValue(value?.name.common, defaultValue)} )).subscribe(console.log)
 
   }
-  
+
   ngAfterViewInit(): void {
     this.vatBusinessLogicService.resetForm(this.resetBtn.nativeElement, this.destroySignal);
   }
