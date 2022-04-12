@@ -1,23 +1,12 @@
-//@use '~@angular/material' as mat;
-//@include mat-core();
-//@import '~@angular/material/theming';
-//@use '~@angular/typography/typography';
-//@at-root '~@angular/typography/typography-utils';
-//@import 'var.scss';
-//@use 'sass:map';
 
 @use 'sass:map';
-@use '@angular/material' as mat;
+@use '@angular/material'as mat;
 @import '~@angular/material/theming';
-/*$color-config:    mat.get-color-config($theme);
-$primary-palette: map.get($color-config, 'primary');
-$accent-palette:  map.get($color-config, 'accent');
-$warn-palette:    map.get($color-config, 'warn');
-$is-dark-theme:   map.get($color-config, 'is-dark');*/
 $primary: mat-palette($mat-indigo);
-$accent:  mat-palette($mat-pink, A200, A100, A400);
+$accent: mat-palette($mat-pink, A200, A100, A400);
 $warn: mat-palette($mat-red);
 $theme: mat-light-theme($primary, $accent, $warn);
+
 :host {
     display: flex;
     justify-content: center;
@@ -44,18 +33,37 @@ $theme: mat-light-theme($primary, $accent, $warn);
         mat-radio-group {
             align-self: center;
         }
-        .selected-country-view{
+
+        .selected-country-view {
             margin-left: 0.2rem;
         }
-        .mat-error{
+
+        .mat-error {
             background-color: #f44336;
             color: white;
             margin-top: 2px;
             border-radius: 5px;
         }
-        ::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-persistent-ripple{
-            //background-color: mat-color($mat-indigo) !important;
-            background-color: mat-color($primary) !important;
+
+        ::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-persistent-ripple {
+            background-color: mat-color($primary);
+        }
+
+        ::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+            border-color: mat-color($primary);
+        }
+
+        ::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle {
+            background-color: mat-color($primary);
+        }
+        ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar{
+            background-color: mat-color($primary) ;
+        }
+        ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+            background-color: mat-color($primary)
+        }
+        ::ng-deep .mat-slide-toggle.mat-checked .mat-ripple-element{
+            background-color: mat-color($primary)
         }
     }
 }
