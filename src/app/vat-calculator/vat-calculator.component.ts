@@ -9,8 +9,9 @@ import {
   ViewChild
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { Chart } from 'chart.js';
 import {
-  merge, Observable, Subject, tap
+  merge, Observable, Subject
 } from 'rxjs';
 import { VatAnimation } from './animations/vat.animate';
 import { Country } from './models/vat-country.models';
@@ -34,13 +35,13 @@ export class VatCalculatorComponent implements OnInit, OnDestroy, AfterViewInit 
   private destroySignal: Subject<void>;
 
   @ViewChild('resetBtn', { read: ElementRef }) resetBtn!: ElementRef;
-  @ViewChild('resetBtn', { read: ElementRef }) chartWrapper!: ElementRef;
+  @ViewChild('chartWrapper', /*{ read: ElementRef }**/) chartWrapper!: ElementRef;
 
   constructor(
     private vatCalculatorService: VatCalculatorService,
     private vatBusinessLogicService: VatBusinessLogicService,
-    private vatCalulatorChartService:VatCalculatorChartService,
-    private renderer:Renderer2
+    private vatCalulatorChartService: VatCalculatorChartService,
+    private renderer: Renderer2
 
   ) {
     this.destroySignal = new Subject<void>();
@@ -74,9 +75,14 @@ export class VatCalculatorComponent implements OnInit, OnDestroy, AfterViewInit 
 
   ngAfterViewInit(): void {
     this.vatBusinessLogicService.resetForm(this.resetBtn.nativeElement, this.destroySignal);
-    if(this.chartWrapper){
-      const chart = this.vatCalulatorChartService.getChart();
-      this.renderer.appendChild(this.chartWrapper, chart);
+    if (this.chartWrapper) {
+      const config = this.vatCalulatorChartService.getChart();
+      const el: HTMLCanvasElement = this.renderer.createElement("canvas");    
+      const chart = new Chart(el.getContext("2d")!, config);
+      chart.canvas.style.width ="500px";
+      chart.canvas.style.height ="500px";
+      this.renderer.appendChild(this.chartWrapper.nativeElement, el);
+
 
     }
 

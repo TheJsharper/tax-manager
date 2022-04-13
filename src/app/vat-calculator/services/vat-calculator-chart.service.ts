@@ -1,23 +1,23 @@
-import { Injectable, Renderer2, RendererFactory2 } from "@angular/core";
-import { Chart, ChartConfiguration } from "chart.js";
+import { Injectable } from "@angular/core";
+import { Chart, ChartConfiguration, registerables } from "chart.js";
 
 @Injectable()
 
 export class VatCalculatorChartService {
-    private renderer: Renderer2;
-    constructor( rendererFactory: RendererFactory2) {
-        this.renderer =  rendererFactory.createRenderer(null, null);
+   
+    constructor() {
+        Chart.register(...registerables);
      }
 
-    getChart(): Chart {
+    getChart(): ChartConfiguration {
 
         const data = {
-            labels: ['Red', 'Orange'],
+            labels: ['VAT', 'Tax'],
             datasets: [
                 {
                     label: 'Dataset 1',
                     data: [40, 60],
-                    backgroundColor: ['black', "white"] // Object.values(Utils.CHART_COLORS),
+                    backgroundColor: ['red', "blue"] 
                 }
             ]
         };
@@ -32,15 +32,13 @@ export class VatCalculatorChartService {
                     },
                     title: {
                         display: true,
-                        text: 'Chart.js Pie Chart'
+                        text: 'Porcentage VAT'
                     }
                 }
             },
         };
 
-        const el: HTMLCanvasElement = this.renderer.createElement("canvas");
-        const ctx = el.getContext('2d')!;
-        const chart: Chart = new Chart(ctx, config);
-        return chart;
+     
+        return config;
     }
 }

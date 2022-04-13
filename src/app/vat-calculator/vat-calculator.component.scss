@@ -10,7 +10,9 @@ $theme: mat-light-theme($primary, $accent, $warn);
     display: flex;
     justify-content: center;
     margin-top: .5rem;
-
+    .chart-wrapper{
+        width: 500px;
+    }
     .mat-raised-button {
         align-self: flex-end;
     }
