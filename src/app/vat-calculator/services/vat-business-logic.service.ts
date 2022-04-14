@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { AbstractControl, FormBuilder, FormControl, FormGroup } from "@angular/forms";
+import { Chart } from "chart.js";
 import { fromEvent, map, merge, Observable, Subject, takeUntil, tap, withLatestFrom } from "rxjs";
 import { Country } from "../models/vat-country.models";
 import { VatValidators } from "../validators/vat-validators";
@@ -11,7 +12,7 @@ export class VatBusinessLogicService {
     private controls!: Map<string, AbstractControl>;
 
     constructor(private fb: FormBuilder) { }
-    
+
     public getInitFormGroup(): FormGroup {
         const formGroup: FormGroup = this.fb.group({
             selected: new FormControl(),
@@ -78,7 +79,7 @@ export class VatBusinessLogicService {
     public calculateDefaultVAT(destroySignal: Subject<void>, defaultValue: {
         onlySelf: boolean,
         emitEvent: boolean,
-    }, selected: Observable<Country | undefined>): void {
+    }, selected: Observable<Country | undefined>, chart: Chart): void {
 
 
         this.controls.get("labelPosition")!.valueChanges.pipe(
@@ -104,6 +105,11 @@ export class VatBusinessLogicService {
                         this.controls.get('valueAddedVAT')?.setValue(vatToPay, defaultValue);
                         this.controls.get('priceInclVAT')?.setValue(parseFloat((vatToPay + currentValue).toFixed(2)), defaultValue);
                         this.controls.get('paidInPorcentage')?.setValue(parseFloat((vatToPay / currentValue).toFixed(2)), defaultValue);
+                        if (chart) {
+                            chart.data.datasets[0].data = [currentValue/ (vatToPay + currentValue) * 100, vatToPay / (vatToPay + currentValue) * 100];
+                            chart.update();
+                        }
+    
                     }
 
                 })
@@ -130,7 +136,7 @@ export class VatBusinessLogicService {
     public calculateNextVat(destroySignal: Subject<void>, defaultValue: {
         onlySelf: boolean,
         emitEvent: boolean,
-    }): void {
+    }, chart: Chart): void {
         const mergedInputs = this.getMergeInouts();
         const withoutVATControl = this.controls.get('withoutVAT');
 
@@ -150,8 +156,14 @@ export class VatBusinessLogicService {
                     const totalPrice: number = parseFloat((vatToPay + values.value).toFixed(2));
 
                     valueAddedVATControl?.setValue(vatToPay, defaultValue);
+
                     priceInclVATControl?.setValue(totalPrice, defaultValue);
+                    
                     paidInPorcentageControl?.setValue(parseFloat((vatToPay / totalPrice).toFixed(2)), defaultValue);
+                    if (chart) {
+                        chart.data.datasets[0].data = [values.value / totalPrice * 100, vatToPay / totalPrice * 100];
+                        chart.update();
+                    }
 
 
                 } else if (values.name == 'withoutVAT' && (!values.value || values.value == 0)) {
@@ -164,12 +176,19 @@ export class VatBusinessLogicService {
                 if (values.name == 'valueAddedVAT' && values.value && values.value != 0) {
                     const addedVat: number = parseFloat(values.value.toFixed(2));
 
-                    const WithoutAVATTOPay: number = parseFloat((addedVat / vatInPorcentage).toFixed(2));
-                    const totalPrice: number = addedVat + WithoutAVATTOPay;
+                    const withoutVATToPay: number = parseFloat((addedVat / vatInPorcentage).toFixed(2));
+                    const totalPrice: number = addedVat + withoutVATToPay;
 
-                    withoutVATControl?.setValue(WithoutAVATTOPay, defaultValue);
+                    withoutVATControl?.setValue(withoutVATToPay, defaultValue);
+
                     priceInclVATControl?.setValue(totalPrice, defaultValue);
+
                     paidInPorcentageControl?.setValue(parseFloat((addedVat / totalPrice).toFixed(2)), defaultValue);
+
+                    if (chart) {
+                        chart.data.datasets[0].data = [withoutVATToPay / totalPrice * 100, addedVat / totalPrice * 100];
+                        chart.update();
+                    }
 
                 } else if (values.name == 'valueAddedVAT' && (!values.value || values.value == 0)) {
                     withoutVATControl?.setValue(null, defaultValue);
@@ -181,8 +200,15 @@ export class VatBusinessLogicService {
                     const valueAdded: number = parseFloat((total * vatInPorcentage).toFixed(2));
 
                     valueAddedVATControl?.setValue(valueAdded, defaultValue);
+
                     withoutVATControl?.setValue(parseFloat((total - valueAdded).toFixed(2)), defaultValue);
+
                     paidInPorcentageControl?.setValue(parseFloat((valueAdded / total).toFixed(2)), defaultValue);
+
+                    if (chart) {
+                        chart.data.datasets[0].data = [(total - valueAdded) / total * 100, valueAdded / total * 100];
+                        chart.update();
+                    }
 
                 } else if (values.name == 'priceInclVAT' && (!values.value || values.value == 0)) {
                     valueAddedVATControl?.setValue(null, defaultValue);

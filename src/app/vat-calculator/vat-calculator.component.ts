@@ -1,7 +1,6 @@
+
 import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
+  AfterViewInit, ChangeDetectionStrategy, Component,
   ElementRef,
   OnDestroy,
   OnInit,
@@ -23,7 +22,7 @@ import { VatCalculatorService } from './services/vat-calculator.service';
   selector: 'vat-calculator',
   templateUrl: './vat-calculator.component.html',
   styleUrls: ['./vat-calculator.component.scss'],
- // changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [VatAnimation.errorAnimation()]
 })
 export class VatCalculatorComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -33,15 +32,15 @@ export class VatCalculatorComponent implements OnInit, OnDestroy, AfterViewInit 
 
 
   private destroySignal: Subject<void>;
+  private chartWrapper!: ElementRef;
 
   @ViewChild('resetBtn', { read: ElementRef }) resetBtn!: ElementRef;
-  private chartWrapper!:ElementRef;
-  @ViewChild('chartWrapper', /*{ read: ElementRef }**/{static:true}) set content(content:ElementRef){
-    console.log("set====>", content);
-    this.chartWrapper=content;
-  } 
 
-  private chart!:Chart;
+  @ViewChild('chartWrapper', { static: true }) set content(content: ElementRef) {
+    this.chartWrapper = content;
+  }
+
+  private chart!: Chart;
 
   constructor(
     private vatCalculatorService: VatCalculatorService,
@@ -58,22 +57,9 @@ export class VatCalculatorComponent implements OnInit, OnDestroy, AfterViewInit 
 
     this.formGroup = this.vatBusinessLogicService.getInitFormGroup();
 
-    if (this.chartWrapper) {
-      const config = this.vatCalulatorChartService.getChart();
-      const el: HTMLCanvasElement = this.renderer.createElement("canvas");    
-      this. chart = new Chart(el.getContext("2d")!, config);
-      this.chart.canvas.style.width ="500px";
-      this.chart.canvas.style.height ="500px";
-      this.renderer.appendChild(this.chartWrapper.nativeElement, el);
-     
+    if (this.chartWrapper)
+      this.chart = this.vatCalulatorChartService.getChart(this.renderer, this.chartWrapper);
 
-    }
-    this.formGroup.statusChanges.subscribe((status)=> {
-      if(status == "VALID" && this.chart){
-        this.chart.canvas.style.visibility="visible";
-        this.chart.update();
-      }
-    })
     this.countries = this.vatCalculatorService.getSortedAscCountries();
 
     const selectedCountry: Observable<Country | undefined> = this.vatCalculatorService.getCountryByName(this.countries, 'Austria');
@@ -89,15 +75,15 @@ export class VatCalculatorComponent implements OnInit, OnDestroy, AfterViewInit 
     };
     this.vatBusinessLogicService.swichtSlideToggle(this.destroySignal, defaultValue);
 
-    this.vatBusinessLogicService.calculateDefaultVAT(this.destroySignal, defaultValue, this.selected);
+    this.vatBusinessLogicService.calculateDefaultVAT(this.destroySignal, defaultValue, this.selected, this.chart);
 
-    this.vatBusinessLogicService.calculateNextVat(this.destroySignal, defaultValue);
+    this.vatBusinessLogicService.calculateNextVat(this.destroySignal, defaultValue, this.chart);
 
   }
 
   ngAfterViewInit(): void {
+
     this.vatBusinessLogicService.resetForm(this.resetBtn.nativeElement, this.destroySignal);
-    
 
   }
   ngOnDestroy(): void {
