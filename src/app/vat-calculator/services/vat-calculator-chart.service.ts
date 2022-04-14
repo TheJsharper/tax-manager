@@ -9,7 +9,7 @@ export class VatCalculatorChartService {
         Chart.register(...registerables);
     }
 
-    getConfigChart(): ChartConfiguration {
+    private getConfigChart(): ChartConfiguration {
 
         const data = {
             labels: ['VAT', 'Tax'],
@@ -53,7 +53,7 @@ export class VatCalculatorChartService {
         chart.canvas.style.height = "500px";
 
         renderer.appendChild(chartWrapper.nativeElement, el);
-        
+
         return chart;
     }
 }
