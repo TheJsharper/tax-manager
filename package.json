@@ -34,6 +34,7 @@
     "@angular/cli": "~13.2.0",
     "@angular/compiler-cli": "~13.2.0",
     "@nrwl/workspace": "14.0.5",
+    "@nxrocks/nx-spring-boot": "^4.0.2",
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",
     "jasmine-core": "~4.0.0",

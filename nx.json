@@ -34,5 +34,8 @@
   "workspaceLayout": {
     "appsDir": "projects",
     "libsDir": "projects"
-  }
+  },
+  "plugins": [
+    "@nxrocks/nx-spring-boot"
+  ]
 }

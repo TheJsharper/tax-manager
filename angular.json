@@ -31,8 +31,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss", 
-              "src/theme.scss",             
+              "src/styles.scss",
+              "src/theme.scss",
               "node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css"
             ],
             "scripts": []
@@ -101,13 +101,75 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss",              
+              "src/styles.scss",
               "node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css"
             ],
             "scripts": []
           }
         }
       }
+    },
+    "vat-calculator-backend": {
+      "root": "projects/vat-calculator-backend",
+      "sourceRoot": "projects/vat-calculator-backend/src",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@nxrocks/nx-spring-boot:build",
+          "options": {
+            "root": "projects/vat-calculator-backend"
+          }
+        },
+        "test": {
+          "builder": "@nxrocks/nx-spring-boot:test",
+          "options": {
+            "root": "projects/vat-calculator-backend"
+          }
+        },
+        "clean": {
+          "builder": "@nxrocks/nx-spring-boot:clean",
+          "options": {
+            "root": "projects/vat-calculator-backend"
+          }
+        },
+        "format": {
+          "builder": "@nxrocks/nx-spring-boot:format",
+          "options": {
+            "root": "projects/vat-calculator-backend"
+          }
+        },
+        "format-check": {
+          "builder": "@nxrocks/nx-spring-boot:format-check",
+          "options": {
+            "root": "projects/vat-calculator-backend"
+          }
+        },
+        "run": {
+          "builder": "@nxrocks/nx-spring-boot:run",
+          "options": {
+            "root": "projects/vat-calculator-backend"
+          }
+        },
+        "serve": {
+          "builder": "@nxrocks/nx-spring-boot:serve",
+          "options": {
+            "root": "projects/vat-calculator-backend"
+          }
+        },
+        "buildImage": {
+          "builder": "@nxrocks/nx-spring-boot:buildImage",
+          "options": {
+            "root": "projects/vat-calculator-backend"
+          }
+        },
+        "buildInfo": {
+          "builder": "@nxrocks/nx-spring-boot:buildInfo",
+          "options": {
+            "root": "projects/vat-calculator-backend"
+          }
+        }
+      },
+      "tags": []
     }
   },
   "defaultProject": "tax-manager"
