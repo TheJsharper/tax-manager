@@ -83,6 +83,15 @@ $theme: mat-light-theme($primary, $accent, $warn);
         flex-direction: column;
 
     }
+
+    @media only screen and (max-width: 900px) {
+
+      // ::neg-deep .row-form {
+        .mat-raised-button {
+            align-self: stretch;
+        }
+    }
+   // }
 }
 
 .img-layout {
