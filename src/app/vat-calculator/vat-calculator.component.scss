@@ -31,6 +31,9 @@ $theme: mat-light-theme($primary, $accent, $warn);
     .row-form {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
+        /*grid-template-areas: "head head"
+        "nav  main"
+        "nav  foot";*/
 
         mat-label,
         mat-slide-toggle,
@@ -86,12 +89,15 @@ $theme: mat-light-theme($primary, $accent, $warn);
 
     @media only screen and (max-width: 900px) {
 
-      // ::neg-deep .row-form {
+        min-width: 100%;
         .mat-raised-button {
             align-self: stretch;
         }
+        .form-container {
+            justify-content: flex-start;
+        align-items: flex-start;
+        }
     }
-   // }
 }
 
 .img-layout {
