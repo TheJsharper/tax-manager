@@ -1,5 +1,5 @@
 @use 'sass:map';
-@use '@angular/material'as mat;
+@use '@angular/material' as mat;
 @import '~@angular/material/theming';
 $primary: mat-palette($mat-indigo);
 $accent: mat-palette($mat-pink, A200, A100, A400);
@@ -9,10 +9,13 @@ $theme: mat-light-theme($primary, $accent, $warn);
 :host {
     display: flex;
     justify-content: center;
+    align-items: center;
     margin-top: .5rem;
-    .chart-wrapper{
+
+    .chart-wrapper {
         width: 500px;
     }
+
     .mat-raised-button {
         align-self: flex-end;
     }
@@ -73,6 +76,12 @@ $theme: mat-light-theme($primary, $accent, $warn);
         ::ng-deep .mat-form-field-ripple {
             background-color: mat-color($primary);
         }
+    }
+
+    @media only screen and (max-width: 1400px) {
+
+        flex-direction: column;
+
     }
 }
 
