@@ -106,6 +106,7 @@ $theme: mat-light-theme($primary, $accent, $warn);
     @media only screen and (max-width: 770px) {
         justify-content: stretch;
         align-items: stretch;
+        margin: .5rem;
 
         .chart-wrapper {
             width: 75%;
