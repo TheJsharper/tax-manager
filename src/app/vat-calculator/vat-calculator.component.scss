@@ -13,11 +13,7 @@ $theme: mat-light-theme($primary, $accent, $warn);
     margin-top: .5rem;
 
     .chart-wrapper {
-        width: 500px;
-    }
-
-    .mat-raised-button {
-        align-self: flex-end;
+        width: 35%;
     }
 
     .form-container {
@@ -25,15 +21,12 @@ $theme: mat-light-theme($primary, $accent, $warn);
         flex-direction: column;
         justify-content: center;
         align-items: stretch;
-        min-width: 700px;
     }
 
     .row-form {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
-        /*grid-template-areas: "head head"
-        "nav  main"
-        "nav  foot";*/
+        width: 100%;
 
         mat-label,
         mat-slide-toggle,
@@ -85,18 +78,41 @@ $theme: mat-light-theme($primary, $accent, $warn);
 
         flex-direction: column;
 
+        .chart-wrapper {
+            width: 40%;
+        }
+
     }
 
     @media only screen and (max-width: 900px) {
 
-        min-width: 100%;
+        .chart-wrapper {
+            width: 50%;
+        }
+
         .mat-raised-button {
             align-self: stretch;
         }
+
         .form-container {
             justify-content: flex-start;
-        align-items: flex-start;
+            align-items: flex-start;
         }
+    }
+
+
+    @media only screen and (max-width: 770px) {
+        justify-content: stretch;
+        align-items: stretch;
+
+        .chart-wrapper {
+            width: 75%;
+        }
+
+        .row-form {
+            grid-template-columns: 1fr;
+        }
+
     }
 }
 

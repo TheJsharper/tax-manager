@@ -48,9 +48,7 @@ export class VatCalculatorChartService {
 
         const chart: Chart = new Chart(el.getContext("2d")!, config);
 
-        chart.canvas.style.width = "500px";
-
-        chart.canvas.style.height = "500px";
+     
 
         renderer.appendChild(chartWrapper.nativeElement, el);
 
