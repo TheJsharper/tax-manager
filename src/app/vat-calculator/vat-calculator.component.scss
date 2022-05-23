@@ -21,6 +21,7 @@ $theme: mat-light-theme($primary, $accent, $warn);
         flex-direction: column;
         justify-content: center;
         align-items: stretch;
+        align-self: flex-start;
     }
 
     .row-form {
@@ -80,7 +81,9 @@ $theme: mat-light-theme($primary, $accent, $warn);
 
         .chart-wrapper {
             width: 40%;
+            align-self: center;
         }
+        .form-container {align-self: inherit;}
 
     }
 
@@ -88,16 +91,15 @@ $theme: mat-light-theme($primary, $accent, $warn);
 
         .chart-wrapper {
             width: 50%;
+            align-self: center;
         }
 
         .mat-raised-button {
             align-self: stretch;
         }
 
-        .form-container {
-            justify-content: flex-start;
-            align-items: flex-start;
-        }
+       
+        .form-container {align-self: inherit;}
     }
 
 
@@ -107,8 +109,9 @@ $theme: mat-light-theme($primary, $accent, $warn);
 
         .chart-wrapper {
             width: 75%;
+            align-self: center;
         }
-
+        .form-container {align-self: inherit;}
         .row-form {
             grid-template-columns: 1fr;
         }
