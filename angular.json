@@ -3,6 +3,140 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
+    "rx-tax-manager": {
+      "projectType": "application",
+      "root": "projects/rx-tax-manager",
+      "sourceRoot": "projects/rx-tax-manager/src",
+      "prefix": "tax-manager",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/rx-tax-manager",
+            "index": "projects/rx-tax-manager/src/index.html",
+            "main": "projects/rx-tax-manager/src/main.ts",
+            "polyfills": "projects/rx-tax-manager/src/polyfills.ts",
+            "tsConfig": "projects/rx-tax-manager/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/rx-tax-manager/src/favicon.ico",
+              "projects/rx-tax-manager/src/assets"
+            ],
+            "styles": [
+              "projects/rx-tax-manager/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/rx-tax-manager/src/environments/environment.ts",
+                  "with": "projects/rx-tax-manager/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "rx-tax-manager:build:production"
+            },
+            "development": {
+              "browserTarget": "rx-tax-manager:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "rx-tax-manager:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/rx-tax-manager/**/*.ts",
+              "projects/rx-tax-manager/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/projects/rx-tax-manager"
+          ],
+          "options": {
+            "jestConfig": "projects/rx-tax-manager/jest.config.ts",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
+    },
+    "rx-tax-manager-e2e": {
+      "root": "projects/rx-tax-manager-e2e",
+      "sourceRoot": "projects/rx-tax-manager-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "projects/rx-tax-manager-e2e/cypress.json",
+            "devServerTarget": "rx-tax-manager:serve:development"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "rx-tax-manager:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": [
+            "{options.outputFile}"
+          ],
+          "options": {
+            "lintFilePatterns": [
+              "projects/rx-tax-manager-e2e/**/*.{js,ts}"
+            ]
+          }
+        }
+      },
+      "tags": [],
+      "implicitDependencies": [
+        "rx-tax-manager"
+      ]
+    },
     "tax-manager": {
       "projectType": "application",
       "schematics": {
@@ -171,6 +305,5 @@
       },
       "tags": []
     }
-  },
-  "defaultProject": "tax-manager"
+  }
 }
