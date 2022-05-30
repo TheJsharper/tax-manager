@@ -1,3 +1,5 @@
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { TaxManagerHeaderComponent } from './components/tax-manager-header.component';
@@ -6,8 +8,9 @@ import { TaxManagerHeaderComponent } from './components/tax-manager-header.compo
 @NgModule({
   declarations: [TaxManagerHeaderComponent],
   imports: [
-    CommonModule
+    CommonModule,
+    MatIconModule, MatToolbarModule
   ],
-  exports:[TaxManagerHeaderComponent]
+  exports: [TaxManagerHeaderComponent]
 })
 export class TaxManagerHeaderModule { }
