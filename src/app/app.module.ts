@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { TaxManagerHeaderModule } from '@tax-manager/tax-manager-header';
 
 
 @NgModule({
@@ -14,6 +15,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    TaxManagerHeaderModule,
     AppRoutingModule,
      MatIconModule, MatToolbarModule
   ],
