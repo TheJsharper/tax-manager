@@ -137,6 +137,34 @@
         "rx-tax-manager"
       ]
     },
+    "shared": {
+      "projectType": "library",
+      "root": "projects/shared",
+      "sourceRoot": "projects/shared/src",
+      "prefix": "tax-manager",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/projects/shared"
+          ],
+          "options": {
+            "jestConfig": "projects/shared/jest.config.ts",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/shared/**/*.ts",
+              "projects/shared/**/*.html"
+            ]
+          }
+        }
+      },
+      "tags": []
+    },
     "tax-manager": {
       "projectType": "application",
       "schematics": {

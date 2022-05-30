@@ -12,4 +12,8 @@ import { RxVatCalculatorComponent } from "./rx-vat-calculator.component";
     ],
     exports: [RxVatCalculatorComponent]
 })
-export class RxVatCalculatorModule { }
+export class RxVatCalculatorModule {
+    /*constructor(taxManagerHeaderService: TaxManagerHeaderSevice){
+        taxManagerHeaderService
+    }*/
+ }
