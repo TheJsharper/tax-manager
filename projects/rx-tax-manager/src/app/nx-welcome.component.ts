@@ -707,7 +707,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
             </a>
           </div>
         </div>
-      <tax-manager-header> </tax-manager-header> 
+     <!-- <tax-manager-header> </tax-manager-header>-->
         <!--  COMMANDS  -->
         <div id="commands" class="rounded shadow">
           <h2>Next steps</h2>
