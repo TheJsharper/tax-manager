@@ -14,5 +14,5 @@
   ],
   "include": [
     "**/*.ts"
-  ]
+, "../shared/src/lib/services/tax-manager-header.service.ts"  ]
 }

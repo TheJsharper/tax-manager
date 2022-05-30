@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { TaxManagerHeaderModule } from '@tax-manager/tax-manager-header';
+import { TaxManagerHeaderService } from '@tax-manager/shared';
 
 
 @NgModule({
@@ -15,11 +16,21 @@ import { TaxManagerHeaderModule } from '@tax-manager/tax-manager-header';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    TaxManagerHeaderModule,
+    TaxManagerHeaderModule.config({
+      name: 'from vat-calculator',
+      providers: [TaxManagerHeaderService]
+    }),
     AppRoutingModule,
-     MatIconModule, MatToolbarModule
+    MatIconModule, MatToolbarModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+
+
+  constructor(private taxManagerHeaderService: TaxManagerHeaderService) {
+    this.taxManagerHeaderService.settings.next({ name: 'Tax Manager' });
+    this.taxManagerHeaderService.title="Tax Manager";
+  }
+}

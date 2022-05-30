@@ -13,17 +13,17 @@ import { TaxManagerHeaderComponent } from './components/tax-manager-header.compo
   ],
   exports: [TaxManagerHeaderComponent]
 })
-export class TaxManagerHeaderModule { 
-  /**/static config(data:Data):ModuleWithProviders<TaxManagerHeaderModule>{
+export class TaxManagerHeaderModule {
+  static config(data: Data): ModuleWithProviders<TaxManagerHeaderModule> {
     return {
-      
-      providers: [ ...data.providers],
-     ngModule: TaxManagerHeaderModule, 
-   };
+
+      providers: [...data.providers],
+      ngModule: TaxManagerHeaderModule,
+    };
   }
 }
 
-export  interface Data{
-  name:string;
+export interface Data {
+  name: string;
   providers: Provider[]
 }
