@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [{
+export const routes: Routes = [{
   path:'',
-  loadChildren:()=> import('./vat-calculator/vat-calculator.module').then(m => m.VatCalculatorModule),
+  loadChildren:()=> import('./vat-calculator/vat-routing.module').then(m => m.routes),
 }];
-
+/*
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule { }*/

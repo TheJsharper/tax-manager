@@ -1,16 +1,21 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
+import { VatBusinessLogicService } from './services/vat-business-logic.service';
+import { VatCalculatorService } from './services/vat-calculator.service';
 import { VatCalculatorComponent } from './vat-calculator.component';
+import { provideHttpClient } from '@angular/common/http';
 
-const routes: Routes = [
+export const routes: Routes = [
     {
         path: '',
-        component: VatCalculatorComponent
+        component: VatCalculatorComponent,
+        providers: [
+          VatCalculatorService, VatBusinessLogicService, provideHttpClient()
+        ]
     }
 ];
-
+/*
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class VATRoutingModule { }
+export class VATRoutingModule { }*/

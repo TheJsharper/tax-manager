@@ -11,10 +11,28 @@ import {
 import { Country } from './models/vat-country.models';
 import { VatBusinessLogicService } from './services/vat-business-logic.service';
 import { VatCalculatorService } from './services/vat-calculator.service';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { CommonModule } from '@angular/common';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'vat-calculator',
   templateUrl: './vat-calculator.component.html',
+  standalone: true,
+  imports:[CommonModule, ReactiveFormsModule, 
+      MatSelectModule,
+      MatFormFieldModule,
+     MatRadioModule, 
+     MatIconModule, 
+     MatInputModule,
+     MatCheckboxModule,
+     MatSlideToggleModule],
   styleUrls: ['./vat-calculator.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
