@@ -1,27 +1,31 @@
-<div [formGroup]="formGroup" class="form-container">
+<div [formGroup]="formGroup" class="form-container" id="container">
 
 
   <div class="row-form">
 
     <mat-form-field appearance="fill" *ngIf="countries as countriesList">
       <mat-label>Country</mat-label>
-      <mat-select formControlName="selected">
-        <mat-option *ngFor="let country of (countriesList | async)" [value]="country">
+      <mat-select [formControl]="$any(formGroup).get('selected')">
+        <mat-option *ngFor="let country of (countriesList | async)" [value]="country" >
           <ng-container [ngTemplateOutlet]="content" [ngTemplateOutletContext]="{food: country}">
           </ng-container>
         </mat-option>
       </mat-select>
+  
     </mat-form-field>
+    <div class="selected-country-view" *ngIf="selected | async as country ">
 
+      <ng-container [ngTemplateOutlet]="content" [ngTemplateOutletContext]="{food: country}"> </ng-container>
+    </div>
 
   </div>
 
   <div class="row-form">
     <p *ngIf="selected as selectedCountry">Taxes:</p>
-    <mat-radio-group formControlName="labelPosition">
-      <mat-radio-button *ngFor="let t of (selected |async)?.tax?.taxes let i = index;" [value]="i">
+    <mat-radio-group formControlName="labelPosition" >
+      <mat-radio-button *ngFor="let t of (selected |async)?.tax?.taxes let i = index;" [value]="i" >
         {{t.porcentage}}</mat-radio-button>
-
+        <mat-error [@flyInOut] *ngIf="formGroup?.errors?.['isNotPorcentageChoosen']" >you need to choice porcentage for calulation</mat-error>
     </mat-radio-group>
 
   </div>
@@ -49,18 +53,18 @@
 
   <div class="row-form">
 
-    
 
-      <mat-slide-toggle [formControlName]="'byPriceInclVAT'">Price incl. VAT</mat-slide-toggle>
-      <mat-form-field appearance="fill">
-        <input type="number" matInput formControlName="priceInclVAT"
-          [readonly]="!(formGroup.get('byPriceInclVAT')?.value)">
-      </mat-form-field>
-      <mat-label *ngIf="formGroup.get('paidInPorcentage')?.value">{{formGroup.get("paidInPorcentage")?.value}}%
-      </mat-label>
-    
+
+    <mat-slide-toggle [formControlName]="'byPriceInclVAT'">Price incl. VAT</mat-slide-toggle>
+    <mat-form-field appearance="fill">
+      <input type="number" matInput formControlName="priceInclVAT"
+        [readonly]="!(formGroup.get('byPriceInclVAT')?.value)">
+    </mat-form-field>
+    <mat-label *ngIf="formGroup.get('paidInPorcentage')?.value">{{formGroup.get("paidInPorcentage")?.value}}%
+    </mat-label>
+
   </div>
-
+  <button #resetBtn mat-raised-button color="primary" [disabled]="formGroup.pristine">Reset</button>
 
 </div>
 
@@ -72,3 +76,5 @@
       {{food.name.common}} </div>
   </div>
 </ng-template>
+
+<div [hidden]="(formGroup)!.errors || formGroup.pristine "  class="chart-wrapper" #chartWrapper></div>
