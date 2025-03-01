@@ -1,10 +1,12 @@
 
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
   AfterViewInit, ChangeDetectionStrategy, Component,
   ElementRef,
+  Inject,
   OnDestroy,
   OnInit,
+  PLATFORM_ID,
   Renderer2,
   ViewChild
 } from '@angular/core';
@@ -63,15 +65,18 @@ export class VatCalculatorComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   private chart!: Chart;
+  isBrowser = false;
 
   constructor(
     private vatCalculatorService: VatCalculatorService,
     private vatBusinessLogicService: VatBusinessLogicService,
     private vatCalulatorChartService: VatCalculatorChartService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    @Inject(PLATFORM_ID) private platformId: Object
 
   ) {
     this.destroySignal = new Subject<void>();
+    this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
 

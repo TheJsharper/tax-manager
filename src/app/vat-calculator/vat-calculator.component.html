@@ -77,4 +77,4 @@
   </div>
 </ng-template>
 
-<div [hidden]="(formGroup)!.errors || formGroup.pristine "  class="chart-wrapper" #chartWrapper></div>
+<div [hidden]="(formGroup)!.errors || formGroup.pristine  && isBrowser"  class="chart-wrapper" #chartWrapper></div>
