@@ -1,6 +1,11 @@
+@use '@angular/material/' as mat;
 :host{
     .toolbar-spacer {
         flex: 1 1 auto;
       }
       
+      ::ng-deep .mat-toolbar-row, .mat-toolbar-single-row {
+        background-color: mat.m2-get-color-from-palette(mat.$violet-palette, 50) ;
+        color: mat.m2-get-color-from-palette(mat.$violet-palette, 100) ;
+    }
 }
