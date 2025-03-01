@@ -1,4 +1,5 @@
 
+import { CommonModule } from '@angular/common';
 import {
   AfterViewInit, ChangeDetectionStrategy, Component,
   ElementRef,
@@ -7,7 +8,15 @@ import {
   Renderer2,
   ViewChild
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioButton, MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import {MatButtonModule} from '@angular/material/button';
 import { Chart } from 'chart.js';
 import {
   merge, Observable, Subject
@@ -17,28 +26,23 @@ import { Country } from './models/vat-country.models';
 import { VatBusinessLogicService } from './services/vat-business-logic.service';
 import { VatCalculatorChartService } from './services/vat-calculator-chart.service';
 import { VatCalculatorService } from './services/vat-calculator.service';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatSelectModule } from '@angular/material/select';
-import { MatInputModule } from '@angular/material/input';
-import { CommonModule } from '@angular/common';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'vat-calculator',
   templateUrl: './vat-calculator.component.html',
   standalone: true,
-  imports:[CommonModule, ReactiveFormsModule, 
-      MatSelectModule,
-      MatFormFieldModule,
-     MatRadioModule, 
-     MatIconModule, 
-     MatInputModule,
-     MatCheckboxModule,
-     MatSlideToggleModule],
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatRadioModule,
+    MatIconModule,
+    MatInputModule,
+    MatCheckboxModule,
+    MatRadioButton,
+    MatSlideToggleModule],
   styleUrls: ['./vat-calculator.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [VatAnimation.errorAnimation()]
